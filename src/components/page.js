@@ -1,4 +1,5 @@
-import { createElement } from 'eml-core';
+// import { createElement } from 'eml-core';
+import Link from './link';
 
 const versions = {
     '2000': '9',
@@ -60,5 +61,9 @@ const externalClass = (
 
 export default props => {
     // console.log(props)
-    return <div></div>;
+    return (
+        <div>
+            <Link href={true}/>
+        </div>
+    );
 }

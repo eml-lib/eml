@@ -1,19 +1,21 @@
+// import path from 'path';
 import commonJs from 'rollup-plugin-commonjs';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
+// import inject from 'rollup-plugin-inject';
 
 export default {
     input: 'src/index.js',
     output: {
+        name: 'eml',
         file: 'build.js',
-        format: 'cjs'
+        format: 'umd'
     },
     plugins: [
+        // Changes package path to relative
+        nodeResolve(),
         commonJs({
             include: 'node_modules/**'
-        }),
-        nodeResolve({
-            preferBuiltins: false
         }),
         babel({
             exclude: 'node_modules/**',
@@ -30,9 +32,12 @@ export default {
                 }]
             ]
         }),
+        // inject({
+        //     createElement: 'eml-core/create-element'
+        // })
     ],
     watch: {
-        include: ['index.js', 'src/**/*.js'],
+        include: 'src/**/*.js',
         exclude: 'node_modules/**'
     }
 }
