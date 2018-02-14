@@ -8,4 +8,4 @@ function log(object) {
     }));
 }
 
-// console.log(eml);
+console.log(eml);

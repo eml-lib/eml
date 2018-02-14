@@ -44,20 +44,20 @@ function IEWrapper({ children }) {
     );
 }
 
-export default ({ clients }) => {
-    return {
-        component({ children }) {
-            return (
+export default function eml({ children }) {
+    return (
+        <div>
+            <IEWrapper>
                 <div>
-                    <IEWrapper>
-                        <div>
-                            { children }
-                            { clients }
-                        </div>
-                    </IEWrapper>
+                    { children }
                 </div>
-            )
-        },
-        css: 'dsd'
-    };
+            </IEWrapper>
+        </div>
+    );
 }
+
+eml.css = () => (
+    `.a {
+        border: 1px solid red;
+    }`
+);
