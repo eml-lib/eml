@@ -1,6 +1,6 @@
 {
   "name": "eml",
-  "version": "0.0.100",
+  "version": "0.0.101",
   "author": "Vlad Trushin",
   "description": "EML core",
   "homepage": "https://github.com/eml-lib/eml",
@@ -15,15 +15,13 @@
     "watch": "rollup -c -w",
     "prepublishOnly": "npm run build"
   },
-  "dependencies": {
-    "eml-core": "0.0.101"
-  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
+    "eml-core": "0.0.101",
     "rollup": "^0.55.0",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
