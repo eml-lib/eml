@@ -1,63 +1,46 @@
 const { createElement } = require('../eml-core/build.js');
+import parseProps, { parsers } from '../parsers/index';
+import {
+    outlookLineHeight,
+    gmailMobileAppFullWidthBody
+} from '../helpers/client-patches';
 
-const outlook = {
-    css: () => ({
-        table: {
-            borderCollapse: 'collapse',
-            msoTableLspace: '0pt',
-            msoTableRspace: '0pt'
-        }
-    })
-};
-
-const outlookLive = {
-    css: () => ({
-        '.ReadMsgBody, .ExternalClass' : {
-            width: '100%'
-        },
-        '.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass td, .ExternalClass div': {
-            lineHeight: '100%'
-        }
-    })
-};
-
-function IEWrapper({ children }) {
+const Eml = ({ maxWidth = 600, backgroundColor, foregroundColor, children }) => {
     return (
-        <div>
-            { '<!--[if mso | IE]>' }
+        <body bgcolor={backgroundColor}>
+            { '<!--[if mso]>' }
             <table
-                role="presentation"
+                role="presentation" // Force accessibility reader to avoid pronounce table structure information (http://blog.gorebel.com/accessibility-in-email-part-ii/)
                 border="0"
                 cellPadding="0"
                 cellSpacing="0"
-                width="600"
-                align="center"
-                style="width: 600px">
+                width={maxWidth}
+                bgcolor={foregroundColor}
+                className="wrapper"
+            >
                 <tr>
-                    <td style="line-height: 0px; font-size: 0px; mso-line-height-rule: exactly">
-                        { children }
+                    <td align="center">
+                        { '<![endif]-->' }
+                        <div align="left" style={{ maxWidth: `${maxWidth}px`, backgroundColor: foregroundColor }}>
+                            { children }
+                        </div>
+                        { '<!--[if mso]>' }
                     </td>
                 </tr>
             </table>
             { '<![endif]-->' }
-        </div>
+        </body>
     );
-}
+};
 
-export default function eml({ children }) {
-    return (
-        <div>
-            <IEWrapper>
-                <div>
-                    { children }
-                </div>
-            </IEWrapper>
-        </div>
-    );
+Eml.css = () => (
+`body {
+    margin: 0;
+    padding: 0;
 }
-
-eml.css = () => (
-    `.a {
-        border: 1px solid red;
-    }`
+${outlookLineHeight.style}
+${gmailMobileAppFullWidthBody.style}
+`
 );
+
+export default Eml;

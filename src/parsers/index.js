@@ -1,21 +1,10 @@
-function dimension(value) {
-    const match = String(value).match(/^(\d+)(px|%)*$/);
+import * as dimension from './dimension';
+import * as dimensionBox from './dimensionBox';
 
-    if (match) {
-        return {
-            value: Number(match[1]),
-            unit: match[2] || null
-        };
-    } else {
-        return null;
-    }
-}
-
-const parsers = {
-    dimension
+export const parsers = {
+    dimension,
+    dimensionBox
 };
-
-export { parsers };
 
 export default (Component, parseFns) => (props, cxtOptions) => {
     const newProps = Object.entries(props).reduce((acc, [prop, value]) => ({

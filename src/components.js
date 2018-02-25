@@ -1,4 +1,4 @@
-// export { default as page } from './components/page';
-// export { default as link } from './components/link';
 export { default as eml } from './components/eml';
-export { default as flex } from './components/flex';
+export { Cols as cols, Col as col} from './components/cols';
+export { default as block } from './components/block';
+// export { default as link } from './components/link';
