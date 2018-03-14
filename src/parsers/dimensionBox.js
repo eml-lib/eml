@@ -1,6 +1,10 @@
 import { parse as parseDimension } from './dimension';
 
 export function parse(value) {
+    if (typeof value === 'object') {
+        return value;
+    }
+
     const split = value !== '' ? value.split(' ') : null;
 
     if (!Array.isArray(split) || !split.length) {
@@ -9,17 +13,17 @@ export function parse(value) {
     }
 
     const [
-        left,
-        top = left,
-        right = left,
-        bottom = top
+        top,
+        right = top,
+        bottom = top,
+        left = right
     ] = split;
 
     return {
-        left: parseDimension(left),
         top: parseDimension(top),
         right: parseDimension(right),
-        bottom: parseDimension(bottom)
+        bottom: parseDimension(bottom),
+        left: parseDimension(left),
     }
 }
 

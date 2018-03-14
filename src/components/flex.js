@@ -1,5 +1,5 @@
-const { createElement } = require('../eml-core/build.js');
-const { Fragment } = require('../eml-core/build.js');
+// import { createElement, Fragment } from 'eml-core';
+const { createElement, Fragment } = require('../eml-core/build.js');
 
 const packToAlign = {
     'start': 'left',

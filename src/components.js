@@ -1,4 +1,6 @@
 export { default as eml } from './components/eml';
-export { Cols as cols, Col as col} from './components/cols';
+export { default as text } from './components/text';
+export { default as link } from './components/link';
+export { default as image } from './components/image';
 export { default as block } from './components/block';
-// export { default as link } from './components/link';
+// export { Cols as cols, Col as col} from './components/cols';

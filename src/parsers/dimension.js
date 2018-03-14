@@ -1,4 +1,8 @@
 export function parse(value) {
+    if (typeof value === 'object') {
+        return value;
+    }
+
     const match = String(value).match(/^(\d+)(px|%)*$/);
 
     if (!match) {
@@ -13,5 +17,5 @@ export function parse(value) {
 }
 
 export function stringify(dimension) {
-    return dimension.value + dimension.unit;
+    return dimension ? dimension.value + dimension.unit : null;
 }

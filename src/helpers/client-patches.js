@@ -16,6 +16,18 @@ const outlookImageScaling = {
     }
 };
 
+export const outlookXmlns = {
+    style: (
+`<!--[if gte mso 9]>
+    <style style="text/css">
+        v\:* { behavior: url(#default#VML); display: inline-block }
+        o\:* { behavior: url(#default#VML); display: inline-block } 
+        w\:* { behavior: url(#default#VML); display: inline-block }
+    </style>
+<![endif]-->`
+    )
+};
+
 export const outlookLineHeight = {
     style: (
 `/* Force Outlook Desktop to render line heights as they're originally set. */

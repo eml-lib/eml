@@ -1,5 +1,5 @@
-const { createElement } = require('../eml-core/build.js');
-const { Fragment } = require('../eml-core/build.js');
+// import { createElement, Fragment } from 'eml-core';
+const { createElement, Fragment } = require('../eml-core/build.js');
 import { parse as parseDimension, stringify as stringifyDimension } from "../parsers/dimension";
 import element from './element';
 import styles from '../styles';
@@ -64,8 +64,6 @@ const Cols = element(props => {
             : childComponent;
     }
 
-    console.log(children);
-
     return (
         <div
             style={{
@@ -76,7 +74,7 @@ const Cols = element(props => {
             <table
                 cellPadding="0"
                 cellSpacing="0"
-                border="1"
+                border="0"
                 width="100%"
             >
                 <tr>

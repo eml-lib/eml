@@ -1,3 +1,4 @@
+// import { createElement } from 'eml-core';
 const { createElement } = require('../eml-core/build.js');
 import parseProps, { parsers } from '../parsers/index';
 import {
@@ -20,11 +21,29 @@ const Eml = ({ maxWidth = 600, backgroundColor, foregroundColor, children }) => 
             >
                 <tr>
                     <td align="center">
-                        { '<![endif]-->' }
+            { '<![endif]-->' }
                         <div align="left" style={{ maxWidth: `${maxWidth}px`, backgroundColor: foregroundColor }}>
-                            { children }
+                            { children.map(child => {
+                                // const Child = child.type;
+                                // const a = <Child {...child.props} width="100%"/>;
+                                //
+                                // console.log('child', a);
+
+                                if (typeof child === 'object') {
+                                    return {
+                                        ...child,
+                                        props: {
+                                            ...child.props,
+                                            width: '100%'
+                                        }
+                                    };
+                                } else {
+                                    return child;
+                                }
+
+                            }) }
                         </div>
-                        { '<!--[if mso]>' }
+            { '<!--[if mso]>' }
                     </td>
                 </tr>
             </table>

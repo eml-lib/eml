@@ -1,24 +1,33 @@
-export function padding({ left, top, right, bottom }) {
+import { stringify as stringifyDimension } from '../parsers/dimension';
+
+function padding({ top, right, bottom, left }) {
     return {
-        paddingLeft: left ? left.value + left.unit : null,
-        paddingTop: top ? top.value + top.unit : null,
-        paddingRight: right ? right.value + right.unit : null,
-        paddingBottom: bottom ? bottom.value + bottom.unit : null,
+        paddingTop: stringifyDimension(top),
+        paddingRight: stringifyDimension(right),
+        paddingBottom: stringifyDimension(bottom),
+        paddingLeft: stringifyDimension(left),
     };
 }
 
-export function margin({ left, top, right, bottom }) {
+function margin({ top, right, bottom, left }) {
     return {
-        marginLeft: left ? left.value + left.unit : null,
-        marginTop: top ? top.value + top.unit : null,
-        marginRight: right ? right.value + right.unit : null,
-        marginBottom: bottom ? bottom.value + bottom.unit : null,
+        marginTop: stringifyDimension(top),
+        marginRight: stringifyDimension(right),
+        marginBottom: stringifyDimension(bottom),
+        marginLeft: stringifyDimension(left),
+    };
+}
+
+function background() {
+    return {
+
     };
 }
 
 export default {
     padding,
-    margin
+    margin,
+    background
 };
 
 // export function stringify({ left, top, right, bottom }) {
