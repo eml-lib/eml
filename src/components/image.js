@@ -1,7 +1,4 @@
-// import { createElement } from 'eml-core';
 const { createElement, Fragment } = require('../eml-core/build.js');
-// import element from './element';
-// import styles from '../styles';
 
 const Image = props => {
     const {

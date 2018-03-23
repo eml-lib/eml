@@ -1,175 +1,190 @@
 const { createElement, Fragment } = require('../eml-core/build.js');
-import styles from "../styles";
-import { stringify as stringifyDimension } from "../parsers/dimension";
 import IEBlockWrapper from './helpers/IEBlockWrapper';
-import element from './element';
+import isElement from './helpers/is-element';
+import parsers from '../parsers';
+import propParsers from './block-props';
 
 const packToAlign = {
-    'start': 'left',
-    'center': 'center',
-    'end': 'right'
+	'start': 'left',
+	'center': 'center',
+	'end': 'right'
 };
 
 const alignToValign = {
-    'start': 'top',
-    'center': 'middle',
-    'end': 'bottom'
+	'start': 'top',
+	'center': 'middle',
+	'end': 'bottom'
 };
 
-const Block = element(props => {
-    const {
-        padding,
-        margin,
-        border,
-        borderLeft,
-        borderTop,
-        borderRight,
-        borderBottom,
-        borderRadius,
-        background,
-        color,
-        flowDirection = 'row',
-        pack = 'start',
-        align = 'start',
-        selfPack,
-        selfAlign,
-        gap,
-        children
-    } = props;
+const Block = props => {
+	const {
+		padding,
+		margin,
+		border,
+		borderRadius,
+		background,
+		color,
 
-    const childrenFlexes = children.reduce(
-        (acc, { props }) => props && 'flex' in props ? acc + Number(props.flex) : acc,
-        0
-    );
+		width,
+		height,
+		flex,
+		gap,
+		flowDirection,
+		pack,
+		align,
+		packSelf,
+		alignSelf,
 
-    function createFlexItem(child) {
-        const { props } = child;
-        const width = (props && 'flex' in props && props.flex > 0) ? (props.flex / childrenFlexes * 100).toFixed() + '%' : null;
-        const align = (props && 'selfPack' in props) ? packToAlign[props.selfPack] : 'left';
-        const valign = (props && 'selfAlign' in props) ? alignToValign[props.selfAlign] : 'top';
+		children
+	} = propParsers(props);
 
-        const body = typeof child === 'object'
-            ? {
-                ...child,
-                props: {
-                    ...child.props,
-                    width: width ? '100%' : null
-                }
-            }
-            : child;
+	const childrenFlexes = children.reduce(
+		(acc, child) => {
+			const isBlock = isElement(child) && child.type && child.type.componentName === 'block';
+			return isBlock ? acc + propParsers(child.props).flex : acc;
+		},
+		0
+	);
 
-        return (
-            <td width={width} align={align} valign={valign}>
-                { body }
-            </td>
-        );
-    }
+	function createFlexItem(child, parentAlign, parentPack) {
+		let width = null;
+		let color = null;
+		let align = packToAlign[parentPack];
+		let valign = alignToValign[parentAlign];
 
-    function createGap() {
-        return (
-            <td>
-                <table cellPadding={0} cellSpacing={0} width={gap}><tr><td/></tr></table>
-            </td>
-        );
-    }
+		if (isElement(child)) {
+			const props = propParsers(child.props);
 
-    function createFlexItemWithGap(child, i) {
-        return (
-            <Fragment>
-                { createFlexItem(child) }
-                { i < children.length - 1 ? createGap() : null }
-            </Fragment>
-        );
-    }
+			if ('flex' in props && props.flex > 0) {
+				width = (props.flex / childrenFlexes * 100).toFixed() + '%';
+			}
 
-    const childNodes = gap
-        ? children.reduce((acc, child, i) => [...acc, createFlexItemWithGap(child, i)], [])
-        : children.map(createFlexItem);
-    let body;
+			if ('selfPack' in props) {
+				align = packToAlign[props.selfPack];
+			}
 
-    if (flowDirection === 'row') {
-        body = (
-            <IEBlockWrapper
-                padding={padding}
-                fullWidth={childrenFlexes > 0 || props.width}
-                background={background}
-                color={color}
-            >
-                <div align={ pack && pack in packToAlign ? packToAlign[pack] : 'left' }>
-                    <table
-                        cellPadding={0}
-                        cellSpacing={0}
-                        border={0}
-                        width={childrenFlexes > 0 ? '100%' : null}
-                        style={{
-                            border,
-                            borderLeft,
-                            borderTop,
-                            borderRight,
-                            borderBottom,
-                            borderRadius: borderRadius ? stringifyDimension(borderRadius) : null,
-                        }}>
-                        <tr>
-                            { childNodes }
-                        </tr>
-                    </table>
-                </div>
-            </IEBlockWrapper>
-        );
-    } else {
-        body = (
-            <IEBlockWrapper
-                padding={margin}
-                fullWidth={childrenFlexes > 0 || props.width}
-            >
-                <IEBlockWrapper
-                    padding={padding}
-                    fullWidth={childrenFlexes > 0 || props.width}
-                    background={background}
-                    color={color}
-                >
-                    { children.map(child => {
-                        if (typeof child === 'object') {
-                            return {
-                                ...child,
-                                props: {
-                                    ...child.props,
-                                    width: props.align && props.align === 'justify' ? '100%' : null
-                                }
-                            };
-                        } else {
-                            return child;
-                        }
-                    }) }
-                </IEBlockWrapper>
-            </IEBlockWrapper>
-        );
-    }
+			if ('selfAlign' in props) {
+				valign = alignToValign[props.selfAlign];
+			}
 
-    return body;
+			if ('color' in props) {
+				color = parsers.color.stringify(props.color);
+			}
+		}
 
-    // return props.backgroundImage ? (
-    //     <table cellPadding={0} cellSpacing={0} border={0} width="100%">
-    //         <tr>
-    //             <td background={props.backgroundImage} bgcolor="#7bceeb" valign="top">
-    //         { '<!--[if gte mso 9]>' }
-    //         { `<v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width: 300px">` }
-    //         { `<v:fill origin="0.5, 0" position="0.5, 0" type="tile" src="${props.backgroundImage}" />` }
-    //         { `<v:textbox style="mso-fit-shape-to-text: true;" inset="0,0,0,0">` }
-    //         { '<![endif]-->' }
-    //         { body }
-    //         { `<!--[if gte mso 9]>` }
-    //         { `</v:textbox>` }
-    //         { `</v:rect>` }
-    //         { '<![endif]-->' }
-    //             </td>
-    //         </tr>
-    //     </table>
-    // ) : (
-    //     <div>
-    //         { body }
-    //     </div>
-    // );
-});
+		const body = typeof child === 'object'
+			? {
+				...child,
+				props: {
+					...child.props,
+					width: width ? '100%' : null
+				}
+			}
+			: child;
+
+		return (
+			<td width={width} align={align} valign={valign}>
+				{ body }
+			</td>
+		);
+	}
+
+	function createGap() {
+		if (gap.unit === '%') {
+			return <td width={parsers.dimension.stringify(gap)} />;
+		} else {
+			return (
+				<td>
+					<table cellPadding={0} cellSpacing={0} width={parsers.dimension.stringify(gap)}>
+						<tr>
+							<td/>
+						</tr>
+					</table>
+				</td>
+			);
+		}
+	}
+
+	function createFlexItemWithGap(child, parentAlign, parentPack, i) {
+		return (
+			<Fragment>
+				{ createFlexItem(child, parentAlign, parentPack) }
+				{ i < children.length - 1 ? createGap() : null }
+			</Fragment>
+		);
+	}
+
+	const childNodes = gap
+		? children.reduce((acc, child, i) => [...acc, createFlexItemWithGap(child, align, pack, i)], [])
+		: children.map(child => createFlexItem(child, align, pack));
+	
+	let body;
+
+	if (flowDirection === 'row') {
+		body = (
+			<IEBlockWrapper
+				padding={padding}
+				fullWidth={childrenFlexes > 0 || props.width}
+				background={background}
+				color={color}
+				border={border}
+			>
+				<div align={ pack && pack in packToAlign ? packToAlign[pack] : 'left' }>
+					<table
+						cellPadding={0}
+						cellSpacing={0}
+						border={0}
+						width={childrenFlexes > 0 ? '100%' : null}
+						height={parsers.dimension.stringify(height)}
+					>
+						<tr>
+							{ childNodes }
+						</tr>
+					</table>
+				</div>
+			</IEBlockWrapper>
+		);
+	} else {
+
+		body = (
+			<IEBlockWrapper
+				padding={margin}
+				fullWidth={childrenFlexes > 0 || props.width}
+			>
+				<IEBlockWrapper
+					padding={padding}
+					fullWidth={childrenFlexes > 0 || props.width}
+					background={background}
+					color={color}
+				>
+					{ children.map(child => {
+						if (typeof child === 'object') {
+							return {
+								...child,
+								props: {
+									...child.props,
+									width: props.align && props.align === 'stretch' ? '100%' : null
+								}
+							};
+						} else {
+							return child;
+						}
+					}) }
+				</IEBlockWrapper>
+			</IEBlockWrapper>
+		);
+	}
+
+	return (
+		<IEBlockWrapper
+			padding={margin}
+			fullWidth={childrenFlexes > 0 || props.width}
+		>
+			{ body }
+		</IEBlockWrapper>
+	);
+};
+
+Block.componentName = 'block';
 
 export default Block;

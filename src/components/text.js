@@ -1,5 +1,4 @@
 const { createElement } = require('../eml-core/build.js');
-import element from './element';
 
 const text = props => {
     const {

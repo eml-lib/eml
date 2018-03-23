@@ -1,7 +1,7 @@
 // import { createElement, Fragment } from 'eml-core';
 const { createElement, Fragment } = require('../eml-core/build.js');
 import { parse as parseDimension, stringify as stringifyDimension } from "../parsers/dimension";
-import element from './element';
+import element from './hoc/element';
 import styles from '../styles';
 
 const packToAlign = {

@@ -1,6 +1,7 @@
 // import { createElement } from 'eml-core';
 const { createElement, Fragment } = require('../eml-core/build.js');
 import { stringify as stringifyDimension } from "../../parsers/dimension";
+import parsers from '../../parsers';
 
 const IEBlockWrapper = props => {
     const {
@@ -8,9 +9,12 @@ const IEBlockWrapper = props => {
         background,
         color,
         fullWidth = false,
+		border,
         borderRadius,
         children
     } = props;
+
+    console.log(border);
 
     return (
         <table
@@ -18,25 +22,26 @@ const IEBlockWrapper = props => {
             cellSpacing="0"
             border="0"
             role="presentation"
-            bgcolor={ background ? background.color : null }
+            bgcolor={ background ? parsers.color.stringify(background.color) : null }
             width={ fullWidth ? '100%' : null }
             style={{
+            	border,
                 borderRadius: borderRadius ? stringifyDimension(borderRadius) : null
             }}
         >
-            { padding.top ? (
+            { padding && padding.top ? (
                 <tr>
                     <td colSpan="3" height={ padding.top.value }></td>
                 </tr>
             ) : null }
             <tr>
-                <td width={ padding.left ? padding.left.value : 0 }></td>
-                <td style={{ color: color || null }}>
+                <td width={ padding && padding.left ? padding.left.value : 0 }></td>
+                <td style={{ color: parsers.color.stringify(color) }}>
                     { children }
                 </td>
-                <td width={ padding.right ? padding.right.value : 0 }></td>
+                <td width={ padding && padding.right ? padding.right.value : 0 }></td>
             </tr>
-            { padding.bottom ? (
+            { padding && padding.bottom ? (
                 <tr>
                     <td colSpan="3" height={ padding.bottom.value }></td>
                 </tr>

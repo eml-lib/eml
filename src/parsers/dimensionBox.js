@@ -8,8 +8,7 @@ export function parse(value) {
     const split = value !== '' ? value.split(' ') : null;
 
     if (!Array.isArray(split) || !split.length) {
-        // throw new Error('Invalid parameter "' + value + '"');
-        return null;
+        throw new Error('Invalid format "' + value + '"');
     }
 
     const [
@@ -25,6 +24,19 @@ export function parse(value) {
         bottom: parseDimension(bottom),
         left: parseDimension(left),
     }
+}
+
+export function parseValues(top, right, bottom, left) {
+	if (!top && !right && !bottom && !left) {
+		return null;
+	}
+
+	return {
+		top: top ? parseDimension(top) : null,
+		right: right ? parseDimension(right) : null,
+		bottom: bottom ? parseDimension(bottom) : null,
+		left: left ? parseDimension(left) : null,
+	}
 }
 
 // export function stringify({ left, top, right, bottom }) {

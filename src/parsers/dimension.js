@@ -3,16 +3,16 @@ export function parse(value) {
         return value;
     }
 
-    const match = String(value).match(/^(\d+)(px|%)*$/);
+    const matched = String(value).match(/^(\d+)(px|%)*$/);
 
-    if (!match) {
+    if (!matched) {
         // throw new Error('Invalid parameter "' + value + '"');
         return null;
     }
 
     return {
-        value: Number(match[1]),
-        unit: match[2] || 'px'
+        value: Number(matched[1]),
+        unit: matched[2] || 'px'
     };
 }
 

@@ -1,6 +1,4 @@
-// import { createElement } from 'eml-core';
 const { createElement } = require('../eml-core/build.js');
-import parseProps, { parsers } from '../parsers/index';
 import {
     outlookLineHeight,
     gmailMobileAppFullWidthBody

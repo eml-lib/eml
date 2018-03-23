@@ -1,10 +1,8 @@
-// import { createElement } from 'eml-core';
 import IEBlockWrapper from './helpers/IEBlockWrapper';
-import element from "./element";
-
 const { createElement, Fragment } = require('../eml-core/build.js');
+import parsers from '../parsers';
 
-export default element(props => {
+export default props => {
     const {
         to,
         color,
@@ -12,6 +10,7 @@ export default element(props => {
         backgroundColor,
         padding,
         borderRadius,
+
         children,
     } = props;
 
@@ -24,12 +23,12 @@ export default element(props => {
     return (
         <IEBlockWrapper
             padding={padding}
-            background={{ color: backgroundColor }}
+            // background={{ color: backgroundColor }}
             borderRadius={borderRadius}
         >
             <a href={to} style={styles}>
-                {props.children}
+                { children }
             </a>
         </IEBlockWrapper>
     );
-})
+}
