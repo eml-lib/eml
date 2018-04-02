@@ -14,6 +14,7 @@ export default {
 	color,
     dimension,
     dimensionBox,
+
 	textProps,
 	elementProps
 };

@@ -18,6 +18,9 @@ const alignToValign = {
 
 const Block = props => {
 	const {
+		// self props
+		width,
+		height,
 		padding,
 		margin,
 		border,
@@ -25,13 +28,14 @@ const Block = props => {
 		background,
 		color,
 
-		width,
-		height,
-		flex,
+		// children props
 		gap,
 		flowDirection,
 		pack,
 		align,
+
+		// context props
+		flex,
 		packSelf,
 		alignSelf,
 

@@ -4,7 +4,7 @@ export function parse(value) {
 	}
 
 	if (typeof Number(value) !== 'number') {
-		throw new Error('Parameter "' + value + '" not a number');
+		throw new Error(`Parameter "${value}" not a number`);
 	}
 
 	return Number(value);

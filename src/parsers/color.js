@@ -8,7 +8,7 @@ export function parse(value) {
 	const matchedValue = colorConverter(value);
 
 	if (!('values' in matchedValue)) {
-		throw new Error('Invalid color parameter "' + value + '"');
+		throw new Error(`Invalid color parameter "${value}"`);
 	}
 
 	return matchedValue;
