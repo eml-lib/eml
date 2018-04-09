@@ -51,6 +51,8 @@ const element = Component => props => {
 		textTransform: textTransform ? parsers.oneOf.parse(textTransform, ['capitalize', 'uppercase', 'lowercase']) : null
 	};
 
+	Component.componentType = 'element';
+
 	return (
 		<Component {...newProps}>
 			{ children }

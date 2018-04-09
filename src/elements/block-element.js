@@ -2,7 +2,7 @@ import parsers from '../parsers';
 import Element from './element';
 const { createElement, Fragment } = require('../eml-core/build.js');
 
-const blockElement = props => {
+const blockElement = Component => props => {
 	props = Element(props);
 
 	const {
@@ -35,6 +35,8 @@ const blockElement = props => {
 		// backgroundPosition,
 		// backgroundRepeat,
 
+		children,
+
 		...otherProps
 	} = props;
 
@@ -53,15 +55,21 @@ const blockElement = props => {
 		}
 		: null;
 
-	return {
+	const newProps = {
 		...otherProps,
 		width: width ? parsers.dimension.parse(width) : null,
 		height: height ? parsers.dimension.parse(height) : null,
 		padding: paddingProp,
 		margin: marginProp
 	};
-};
 
-// blockElement.type = 'blockElement';
+	Component.componentType = 'block-element';
+
+	return (
+		<Component {...newProps}>
+			{ children }
+		</Component>
+	);
+};
 
 export default blockElement;

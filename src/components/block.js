@@ -44,7 +44,7 @@ const Block = props => {
 
 	const childrenFlexes = children.reduce(
 		(acc, child) => {
-			const isBlock = isElement(child) && child.type && child.type.componentName === 'block';
+			const isBlock = isElement(child) && child.type && child.type.componentType === 'block-element';
 			return isBlock ? acc + propParsers(child.props).flex : acc;
 		},
 		0
