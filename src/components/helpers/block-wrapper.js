@@ -1,9 +1,9 @@
 // import { createElement } from 'eml-core';
 const { createElement, Fragment } = require('../eml-core/build.js');
-import { stringify as stringifyDimension } from "../../parsers/dimension";
-import parsers from '../../parsers';
+import { stringify as stringifyDimension } from '../../parsers/dimension';
+import parsers from '../../parsers/index';
 
-const IEBlockWrapper = props => {
+const BlockWrapper = props => {
     const {
         padding,
         background,
@@ -13,8 +13,6 @@ const IEBlockWrapper = props => {
         borderRadius,
         children
     } = props;
-
-    console.log(border);
 
     return (
         <table
@@ -31,23 +29,23 @@ const IEBlockWrapper = props => {
         >
             { padding && padding.top ? (
                 <tr>
-                    <td colSpan="3" height={ padding.top.value }></td>
+                    <td colSpan="3" height={ padding.top.value } />
                 </tr>
             ) : null }
             <tr>
-                <td width={ padding && padding.left ? padding.left.value : 0 }></td>
+                <td width={ padding && padding.left ? padding.left.value : 0 } />
                 <td style={{ color: parsers.color.stringify(color) }}>
                     { children }
                 </td>
-                <td width={ padding && padding.right ? padding.right.value : 0 }></td>
+                <td width={ padding && padding.right ? padding.right.value : 0 } />
             </tr>
             { padding && padding.bottom ? (
                 <tr>
-                    <td colSpan="3" height={ padding.bottom.value }></td>
+                    <td colSpan="3" height={ padding.bottom.value } />
                 </tr>
             ) : null }
         </table>
     );
 };
 
-export default IEBlockWrapper;
+export default BlockWrapper;

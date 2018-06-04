@@ -1,1 +1,0 @@
-export default node => typeof node === 'object' && node._isElement;
