@@ -1,13 +1,12 @@
-import * as dimension from "../parsers/dimension";
-
 const { createElement, Fragment } = require('../eml-core/build.js');
 
 // import { createElement, Fragment } from 'eml-core';
 import propParsers from './block-props';
 import parsers from '../parsers';
-import FlexItem from './flex-item';
+// import FlexItem from './flex-item';
 import BlockWrapper from './helpers/block-wrapper';
-
+import propConverters from '../prop-converters';
+import composePropConverters from '../prop-converters/helpers/compose';
 
 const packToAlign = {
 	'start': 'left',
@@ -80,7 +79,13 @@ export default props => {
 		flowDirection,
 
 		children
-	} = props;
+	} = composePropConverters(props, [
+		propConverters.margin,
+		propConverters.padding,
+		propConverters.border,
+		propConverters.background,
+		propConverters.text
+	]);
 
 	const parsedGap = gap ? parsers.dimension.parse(gap) : null;
 
@@ -119,49 +124,4 @@ export default props => {
 				{ childNodes }
 			</div>
 		);
-
-	// console.log('childNodes', childNodes);
-
-	// function createFlexItem(props) {
-    //     const width = 'flex' in props && props.flex > 0 && childrenFlexes > 0
-    //         ? (props.flex / childrenFlexes * 100).toFixed() + '%'
-    //         : null;
-    //
-    //     return (
-    //         <td width={ width } align="left">
-    //             { props.children }
-    //         </td>
-    //     );
-    // }
-    //
-    // function createGap() {
-    //     return (
-    //         <td>
-    //             <div style={{ width: gap + 'px' }}></div>
-    //         </td>
-    //     );
-    // }
-    //
-    // function createFlexItemWithGap(props, i) {
-    //     return (
-    //         <Fragment>
-    //             { createFlexItem(props) }
-    //             { i < children.length - 1 ? createGap() : null }
-    //         </Fragment>
-    //     );
-    // }
-    //
-    // const childNodes = gap
-    //     ? children.reduce((acc, child, i) => [...acc, createFlexItemWithGap(child.props, i)], [])
-    //     : children.map(child => createFlexItem(child.props));
-    //
-    // return (
-    //     <div align={ pack && pack in packToAlign ? packToAlign[pack] : 'left' }>
-    //         <table cellPadding="0" cellSpacing="0" border="0" width={ childrenFlexes > 0 ? '100%' : null }>
-    //             <tr>
-    //                 { childNodes }
-    //             </tr>
-    //         </table>
-    //     </div>
-    // );
 }

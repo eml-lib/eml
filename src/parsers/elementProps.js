@@ -1,7 +1,7 @@
 import { parse as parseColor } from "./color";
 import { parse as parseDimension } from "./dimension";
 import { parse as parseDimensionBox, parseValues as parseDimensionBoxValues } from "./dimensionBox";
-import textProps from './textProps';
+import textProps from '../prop-converters/textProps';
 
 const elementProps = props => {
 	props = textProps(props);
