@@ -1,1 +1,1 @@
-export default (props, converters) => converters.reduce((accProps, converter) => converter(accProps), props);
+export default (props, convertFnList) => convertFnList.reduce((accProps, convertFn) => convertFn(accProps), props);
