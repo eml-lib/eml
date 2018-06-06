@@ -1,9 +1,5 @@
-const { createElement, Fragment } = require('../eml-core/build.js');
-
-// import { createElement, Fragment } from 'eml-core';
-import propParsers from './block-props';
+import { createElement, Fragment } from 'eml-core';
 import parsers from '../parsers';
-// import FlexItem from './flex-item';
 import BlockWrapper from './helpers/block-wrapper';
 import propConverters from '../prop-converters';
 import composePropConverters from '../prop-converters/helpers/compose';
@@ -14,37 +10,28 @@ const packToAlign = {
 	'end': 'right'
 };
 
-const alignToVAlign = {
-	'start': 'top',
-	'center': 'middle',
-	'end': 'bottom'
-};
-
-function renderFlexItem({ child, parentAlign, parentPack, childrenFlexes, flowDirection }) {
-	const Child = child.type;
-
-	// console.log('child.props', child.props);
+function renderFlexItem({ child, align, childrenFlexes, direction }) {
+	const { type: Child, props } = child;
 
 	return (
 		<Child
-			{...child.props}
+			{...props}
+			alignSelf={props.alignSelf || align}
+			direction={direction}
 			flexAmount={childrenFlexes}
-			parentPack={parentPack}
-			parentAlign={parentAlign}
-			flowDirection={flowDirection}
 		>
-			{ child.props.children }
+			{ props.children }
 		</Child>
 	);
 }
 
-function renderGap({ gap, flowDirection }) {
-	return flowDirection === 'row'
-		? gap.unit === '%'
+function renderGap({ gap, direction }) {
+	return direction === 'row'
+		? /*gap.unit === '%'
 			? (
 				<td width={gap.value + '%'} />
 			)
-			: (
+			:*/ (
 				<td>
 					<table cellPadding={0} cellSpacing={0} width={gap.value}>
 						<tr>
@@ -64,27 +51,21 @@ function renderGap({ gap, flowDirection }) {
 
 export default props => {
 	const {
-		width,
-		height,
-		padding,
-		margin,
-		border,
-		borderRadius,
-		background,
-		color,
-
-		gap,
+		direction,
 		align,
 		pack,
-		flowDirection,
+		gap,
+		// width,
+		padding,
+		// margin,
+		background,
+		color,
 
 		children
 	} = composePropConverters(props, [
 		propConverters.margin,
 		propConverters.padding,
-		propConverters.border,
-		propConverters.background,
-		propConverters.text
+		propConverters.background
 	]);
 
 	const parsedGap = gap ? parsers.dimension.parse(gap) : null;
@@ -96,19 +77,18 @@ export default props => {
 
 	const childNodes = children.map((child, i) => (
 		<Fragment>
-			{ parsedGap && parsedGap.value > 0 && i > 0 ? renderGap({ gap: parsedGap, flowDirection }) : null }
-			{ renderFlexItem({ child, align, pack, childrenFlexes, flowDirection }) }
+			{ parsedGap && parsedGap.value > 0 && i > 0 ? renderGap({ gap: parsedGap, direction }) : null }
+			{ renderFlexItem({ child, align, childrenFlexes, direction }) }
 		</Fragment>
 	));
 
-	return flowDirection === 'row'
+	return direction === 'row'
 		? (
 			<BlockWrapper
 				padding={padding}
 				fullWidth={true}
 				background={background}
 				color={color}
-				border={border}
 			>
 				<div align={ pack ? packToAlign[pack] : 'left' }>
 					<table cellPadding="0" cellSpacing="0" border="0" width={ childrenFlexes > 0 || pack === 'stretch' ? '100%' : null }>
@@ -120,8 +100,13 @@ export default props => {
 			</BlockWrapper>
 		)
 		: (
-			<div>
+			<BlockWrapper
+				padding={padding}
+				fullWidth={true}
+				background={background}
+				color={color}
+			>
 				{ childNodes }
-			</div>
+			</BlockWrapper>
 		);
 }

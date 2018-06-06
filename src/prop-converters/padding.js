@@ -8,7 +8,6 @@ export const convert = props => {
 		paddingRight,
 		paddingBottom,
 		paddingLeft,
-
 		...restProps
 	} = props;
 

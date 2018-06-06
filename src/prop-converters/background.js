@@ -5,25 +5,19 @@ export const convert = props => {
 	const {
 		background,
 		backgroundColor,
-		backgroundImage,
-		// backgroundPosition,
-		// backgroundRepeat,
-
 		...restProps
 	} = props;
 
 	const newProps = {
 		...restProps,
-		background: (background || backgroundColor || backgroundImage)
+		background: (background || backgroundColor)
 			? {
-				color: backgroundColor ? parseColor(backgroundColor) : null,
-				image: backgroundImage,
+				color: parseColor(background || backgroundColor)
 			}
 			: null
 	};
 
 	return deleteProperties(newProps, [
-		'backgroundColor',
-		'backgroundImage',
+		'backgroundColor'
 	]);
 };

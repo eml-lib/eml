@@ -24,7 +24,6 @@ export const convert = props => {
 		borderTopColor,
 		borderTopStyle,
 		borderTopWidth,
-
 		...restProps
 	} = props;
 

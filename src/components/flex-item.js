@@ -1,32 +1,20 @@
-const { createElement, Fragment } = require('../eml-core/build.js');
+import { createElement } from 'eml-core';
+import propConverters from '../prop-converters';
+import composePropConverters from '../prop-converters/helpers/compose';
 import BlockWrapper from './helpers/block-wrapper';
+import parsers from '../parsers';
 
-// import { createElement, Fragment } from 'eml-core';
-import parsers from "../parsers";
-
-const packToAlign = {
+const alignToHorizontal = {
 	'start': 'left',
 	'center': 'center',
-	'end': 'right'
+	'end': 'right',
+	'stretch': 'left'
 };
 
-const alignToVAlign = {
+const alignToVertical = {
 	'start': 'top',
 	'center': 'middle',
 	'end': 'bottom'
-};
-
-const renderContent = ({ padding, background, color, content }) => {
-	return (
-		<BlockWrapper
-			padding={padding}
-			// fullWidth={childrenFlexes > 0 || props.width}
-			background={background}
-			color={color}
-		>
-			{ content }
-		</BlockWrapper>
-	)
 };
 
 const renderRowFlexItem = () => {
@@ -39,51 +27,47 @@ const renderColumnFlexItem = () => {
 
 export default props => {
 	const {
-		width,
-		// height,
+		// width,
 		flex,
-		pack,
-		align,
-		packSelf,
 		alignSelf,
-
 		padding,
+		background,
 
-		color,
-		border,
-		backgroundColor,
-
-		selfAlign,
-		selfPack,
-		parentPack,
-		parentAlign,
-		flowDirection,
-
+		// from parent
+		direction,
 		flexAmount,
 
 		children
-	} = props;
+	} = composePropConverters(props, [
+		propConverters.padding,
+		propConverters.background,
+	]);
 
-	const newProps = {
-		width: flex ? (parsers.number.parse(flex) / flexAmount * 100).toFixed() + '%' : null,
-		align: selfPack ? packToAlign[selfPack] : packToAlign[parentPack],
-		vAlign: selfAlign ? alignToVAlign[selfAlign] : alignToVAlign[parentAlign]
-	};
-
-	const content = renderContent({
-		content: children,
-		padding: padding ? parsers.dimensionBox.parse(padding) : null
-	});
-
-	return flowDirection === 'row'
+	return direction === 'row'
 		? (
-			<td {...newProps} bgcolor={backgroundColor} style={{ border }}>
-				{ content }
+			<td
+				width={flex ? (parsers.number.parse(flex) / flexAmount * 100).toFixed() + '%' : null}
+				bgcolor={background && alignSelf === 'stretch' ? parsers.color.stringify(background.color) : null}
+				valign={alignToVertical[alignSelf]}
+			>
+				<BlockWrapper
+					padding={padding ? parsers.dimensionBox.parse(padding) : null}
+					background={alignSelf !== 'stretch' ? background : null}
+					fullWidth={true}
+				>
+					{ children }
+				</BlockWrapper>
 			</td>
 		)
 		: (
-			<div style={{ backgroundColor, border }}>
-				{ content }
+			<div align={alignToHorizontal[alignSelf]}>
+				<BlockWrapper
+					padding={padding ? parsers.dimensionBox.parse(padding) : null}
+					background={background}
+					fullWidth={alignSelf === 'stretch'}
+				>
+					{ children }
+				</BlockWrapper>
 			</div>
 		);
 }

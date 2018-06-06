@@ -1,11 +1,11 @@
 export default (angle, colors, fallbackColor) => {
     const oldSyntaxAngle = 360 - angle;
-
     const colorsString = colors.map((color, i) => color + ' ' + (i / colors.length * 100).toFixed(0) + '%').join(', ');
-
     const colorFrom = colors[0];
     const colorTo = colors[colors.length - 1];
+
     let ieColors;
+
     if (angle >= 315 || angle < 45) {
         ieColors = { start: colorTo, end: colorFrom, type: 0 };
     } else if (angle < 135) {

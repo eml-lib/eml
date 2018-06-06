@@ -1,4 +1,5 @@
-const { createElement } = require('../eml-core/build.js');
+// const { createElement } = require('../eml-core/build.js');
+import { createElement } from 'eml-core';
 import {
     outlookLineHeight,
     gmailMobileAppFullWidthBody

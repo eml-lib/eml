@@ -4,8 +4,6 @@ import * as oneOf from './oneOf';
 import * as color from './color';
 import * as dimension from './dimension';
 import * as dimensionBox from './dimensionBox';
-import textProps from '../prop-converters/textProps';
-import elementProps from './elementProps';
 
 export default {
 	number,
@@ -13,10 +11,7 @@ export default {
 	oneOf,
 	color,
     dimension,
-    dimensionBox,
-
-	textProps,
-	elementProps
+    dimensionBox
 };
 
 // export default (Component, parseFns) => (props, cxtOptions) => {

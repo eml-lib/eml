@@ -8,7 +8,6 @@ export const convert = props => {
 		marginRight,
 		marginBottom,
 		marginLeft,
-
 		...restProps
 	} = props;
 
