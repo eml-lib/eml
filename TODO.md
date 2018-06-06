@@ -1,8 +1,14 @@
+`eml`
+
+- [x] `max-width`
+- [x] `background-color`
+- [x] `foreground-color`
+
 `flex`
 
 - [x] `direction`
-- [x] `align`
-- [x] `pack`
+- [x] `align-items`
+- [x] `justify-content`
 - [x] `gap`
 - [ ] `width`
 - [x] `background` (color only)
@@ -19,7 +25,6 @@
 - [ ] `margin-right`
 - [ ] `margin-bottom`
 - [ ] `border`
-- [ ] 
 
 `flex-item`
 
@@ -33,3 +38,17 @@
 - [x] `padding-top`
 - [x] `padding-right`
 - [x] `padding-bottom`
+
+`link`
+
+- [x] `to`
+- [x] `color`
+- [x] `text-decoration`
+
+`text`
+
+- [x] `color`
+
+`image`
+
+- [x] `width`

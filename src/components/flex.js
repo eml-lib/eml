@@ -1,10 +1,10 @@
 import { createElement, Fragment } from 'eml-core';
 import parsers from '../parsers';
 import BlockWrapper from './helpers/block-wrapper';
-import propConverters from '../prop-converters';
-import composePropConverters from '../prop-converters/helpers/compose';
+import propConvertFns from '../prop-convert-fns';
+import composePropConvertFns from '../prop-convert-fns/helpers/compose';
 
-const packToAlign = {
+const alignToHorizontal = {
 	'start': 'left',
 	'center': 'center',
 	'end': 'right'
@@ -52,20 +52,19 @@ function renderGap({ gap, direction }) {
 export default props => {
 	const {
 		direction,
-		align,
-		pack,
+		alignItems,
+		justifyContent,
 		gap,
 		// width,
 		padding,
 		// margin,
 		background,
 		color,
-
 		children
-	} = composePropConverters(props, [
-		propConverters.margin,
-		propConverters.padding,
-		propConverters.background
+	} = composePropConvertFns(props, [
+		propConvertFns.margin,
+		propConvertFns.padding,
+		propConvertFns.background
 	]);
 
 	const parsedGap = gap ? parsers.dimension.parse(gap) : null;
@@ -78,7 +77,7 @@ export default props => {
 	const childNodes = children.map((child, i) => (
 		<Fragment>
 			{ parsedGap && parsedGap.value > 0 && i > 0 ? renderGap({ gap: parsedGap, direction }) : null }
-			{ renderFlexItem({ child, align, childrenFlexes, direction }) }
+			{ renderFlexItem({ child, alignItems, childrenFlexes, direction }) }
 		</Fragment>
 	));
 
@@ -90,8 +89,8 @@ export default props => {
 				background={background}
 				color={color}
 			>
-				<div align={ pack ? packToAlign[pack] : 'left' }>
-					<table cellPadding="0" cellSpacing="0" border="0" width={ childrenFlexes > 0 || pack === 'stretch' ? '100%' : null }>
+				<div align={ justifyContent ? alignToHorizontal[justifyContent] : 'left' }>
+					<table cellPadding="0" cellSpacing="0" border="0" width={ childrenFlexes > 0 || justifyContent === 'stretch' ? '100%' : null }>
 						<tr>
 							{ childNodes }
 						</tr>

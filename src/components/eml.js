@@ -5,7 +5,14 @@ import {
     gmailMobileAppFullWidthBody
 } from '../helpers/client-patches';
 
-const Eml = ({ maxWidth = 600, backgroundColor, foregroundColor, children }) => {
+const Eml = props => {
+	const {
+		maxWidth = 600,
+		backgroundColor,
+		foregroundColor,
+		children
+	} = props;
+
     return (
         <body bgcolor={backgroundColor}>
             { '<!--[if mso]>' }

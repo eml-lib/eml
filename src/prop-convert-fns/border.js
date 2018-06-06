@@ -7,7 +7,7 @@ import deleteProperties from '../helpers/object-delete-properties';
 // none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset | initial | inherit
 const styles = ['none', 'dotted', 'dashed', 'solid'];
 
-export const convert = props => {
+export default props => {
 	const {
 		border,
 		borderColor,

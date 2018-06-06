@@ -1,7 +1,7 @@
 import deleteProperties from '../helpers/object-delete-properties';
 import { parse as parseColor } from '../parsers/color';
 
-export const convert = props => {
+export default props => {
 	const {
 		background,
 		backgroundColor,

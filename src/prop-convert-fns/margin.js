@@ -1,7 +1,7 @@
 import deleteProperties from '../helpers/object-delete-properties';
 import { parse as parseDimensionBox, parseValues as parseDimensionBoxValues } from "../parsers/dimensionBox";
 
-export const convert = props => {
+export default props => {
 	const {
 		margin,
 		marginTop,

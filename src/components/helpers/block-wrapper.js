@@ -1,9 +1,8 @@
-// import { createElement } from 'eml-core';
-const { createElement, Fragment } = require('../eml-core/build.js');
+import { createElement } from 'eml-core';
 import { stringify as stringifyDimension } from '../../parsers/dimension';
-import parsers from '../../parsers/index';
+import parsers from '../../parsers';
 
-const BlockWrapper = props => {
+export default props => {
     const {
         padding,
         background,
@@ -14,38 +13,50 @@ const BlockWrapper = props => {
         children
     } = props;
 
+	const paddingValues = {
+		left: padding && padding.left ? padding.left.value : 0,
+		top: padding && padding.top ? padding.top.value : 0,
+		right: padding && padding.right ? padding.right.value : 0,
+		bottom: padding.bottom ? padding.bottom.value : 0
+	};
+
+    const contentColSize = 1;
+    const colSpan = contentColSize + [paddingValues.left, paddingValues.right].filter(value => value > 0).length;
+
     return (
         <table
             cellPadding="0"
             cellSpacing="0"
             border="0"
             role="presentation"
-            bgcolor={ background ? parsers.color.stringify(background.color) : null }
+            bgColor={ background ? parsers.color.stringify(background.color) : null }
             width={ fullWidth ? '100%' : null }
             style={{
             	border,
                 borderRadius: borderRadius ? stringifyDimension(borderRadius) : null
             }}
         >
-            { padding && padding.top ? (
+            { paddingValues.top > 0 ? (
                 <tr>
-                    <td colSpan="3" height={ padding.top.value } />
+                    <td colSpan={colSpan} height={ paddingValues.top } />
                 </tr>
             ) : null }
             <tr>
-                <td width={ padding && padding.left ? padding.left.value : 0 } />
+				{ paddingValues.left > 0 ? (
+					<td width={ paddingValues.left } />
+				) : null }
                 <td style={{ color: parsers.color.stringify(color) }}>
                     { children }
                 </td>
-                <td width={ padding && padding.right ? padding.right.value : 0 } />
+				{ paddingValues.right > 0 ? (
+					<td width={ paddingValues.right } />
+				) : null }
             </tr>
-            { padding && padding.bottom ? (
+            { paddingValues.bottom > 0 ? (
                 <tr>
-                    <td colSpan="3" height={ padding.bottom.value } />
+                    <td colSpan={colSpan} height={ paddingValues.bottom } />
                 </tr>
             ) : null }
         </table>
     );
 };
-
-export default BlockWrapper;

@@ -1,6 +1,6 @@
 import { createElement } from 'eml-core';
-import propConverters from '../prop-converters';
-import composePropConverters from '../prop-converters/helpers/compose';
+import propConvertFns from '../prop-convert-fns';
+import composePropConvertFns from '../prop-convert-fns/helpers/compose';
 import BlockWrapper from './helpers/block-wrapper';
 import parsers from '../parsers';
 
@@ -32,15 +32,13 @@ export default props => {
 		alignSelf,
 		padding,
 		background,
-
 		// from parent
 		direction,
 		flexAmount,
-
 		children
-	} = composePropConverters(props, [
-		propConverters.padding,
-		propConverters.background,
+	} = composePropConvertFns(props, [
+		propConvertFns.padding,
+		propConvertFns.background,
 	]);
 
 	return direction === 'row'

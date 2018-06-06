@@ -3,7 +3,7 @@ import { parse as parseString } from '../parsers/string';
 import { parse as parseOneOf } from '../parsers/oneOf';
 import { parse as parseDimension } from '../parsers/dimension';
 
-export const convert = props => {
+export default props => {
 	const {
 		fontSize,
 		fontFamily,

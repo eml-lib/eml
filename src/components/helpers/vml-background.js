@@ -1,5 +1,4 @@
-// import { createElement } from 'eml-core';
-const { createElement, Fragment } = require('../eml-core/build.js');
+import { createElement } from 'eml-core';
 
 export default ({ src, children }) => {
     const wrapperBefore = [
