@@ -1,7 +1,6 @@
-import { parse as parseColor } from '../parsers/color';
-import { parse as parseOneOf } from '../parsers/oneOf';
-import { parse as parseDimension } from '../parsers/dimension';
-import deleteProperties from '../helpers/object-delete-properties';
+import { parse as parseColor } from '../types/color';
+import { parse as parseOneOf } from '../types/oneOf';
+import { parse as parseDimension } from '../types/dimension';
 
 // CSS border styles
 // none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset | initial | inherit
@@ -27,8 +26,7 @@ export default props => {
 		...restProps
 	} = props;
 
-	const newProps = {
-		...restProps,
+	return {
 		border: {
 			bottom: {
 				color: borderBottomColor ? parseColor(borderBottomColor) : null,
@@ -50,21 +48,7 @@ export default props => {
 				style: borderTopStyle ? parseOneOf(borderTopStyle, styles) : null,
 				width: borderTopWidth ? parseDimension(borderTopWidth) : null,
 			}
-		}
+		},
+		...restProps
 	};
-
-	return deleteProperties(newProps, [
-		'borderBottomColor',
-		'borderBottomStyle',
-		'borderBottomWidth',
-		'borderLeftColor',
-		'borderLeftStyle',
-		'borderLeftWidth',
-		'borderRightColor',
-		'borderRightStyle',
-		'borderRightWidth',
-		'borderTopColor',
-		'borderTopStyle',
-		'borderTopWidth',
-	]);
 };

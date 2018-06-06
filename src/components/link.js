@@ -1,5 +1,5 @@
 import { createElement } from 'eml-core';
-import parsers from '../parsers';
+import types from '../types';
 
 const Link = props => {
     const {

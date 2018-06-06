@@ -14,6 +14,10 @@ export function parse(value) {
 	return matchedValue;
 }
 
+export function validate(value) {
+	
+}
+
 export function stringify(color) {
 	return color ? color.toHexString() : null;
 }

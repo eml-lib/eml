@@ -1,5 +1,5 @@
 import { createElement, Fragment } from 'eml-core';
-import parsers from '../parsers';
+import types from '../types';
 import BlockWrapper from './helpers/block-wrapper';
 import propConvertFns from '../prop-convert-fns';
 import composePropConvertFns from '../prop-convert-fns/helpers/compose';
@@ -67,10 +67,10 @@ export default props => {
 		propConvertFns.background
 	]);
 
-	const parsedGap = gap ? parsers.dimension.parse(gap) : null;
+	const parsedGap = gap ? types.dimension.parse(gap) : null;
 
 	const childrenFlexes = children.reduce(
-        (acc, { props: { flex } }) => flex ? acc + parsers.number.parse(flex) : acc,
+        (acc, { props: { flex } }) => flex ? acc + types.number.parse(flex) : acc,
         0
     );
 

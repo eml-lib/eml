@@ -1,4 +1,4 @@
-import { stringify as stringifyDimension } from '../parsers/dimension';
+import { stringify as stringifyDimension } from '../types/dimension';
 
 function padding({ top, right, bottom, left }) {
     return {

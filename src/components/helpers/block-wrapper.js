@@ -1,6 +1,5 @@
 import { createElement } from 'eml-core';
-import { stringify as stringifyDimension } from '../../parsers/dimension';
-import parsers from '../../parsers';
+import types from '../../types';
 
 export default props => {
     const {
@@ -24,39 +23,39 @@ export default props => {
     const colSpan = contentColSize + [paddingValues.left, paddingValues.right].filter(value => value > 0).length;
 
     return (
-        <table
-            cellPadding="0"
-            cellSpacing="0"
-            border="0"
-            role="presentation"
-            bgColor={ background ? parsers.color.stringify(background.color) : null }
-            width={ fullWidth ? '100%' : null }
-            style={{
-            	border,
-                borderRadius: borderRadius ? stringifyDimension(borderRadius) : null
-            }}
-        >
-            { paddingValues.top > 0 ? (
-                <tr>
-                    <td colSpan={colSpan} height={ paddingValues.top } />
-                </tr>
-            ) : null }
-            <tr>
+		<table
+			cellPadding="0"
+			cellSpacing="0"
+			border="0"
+			role="presentation"
+			bgColor={ background ? types.color.stringify(background.color) : null }
+			width={ fullWidth ? '100%' : null }
+			style={{
+				border,
+				borderRadius: borderRadius ? types.dimension.stringify(borderRadius) : null
+			}}
+		>
+			{ paddingValues.top > 0 ? (
+				<tr>
+					<td colSpan={colSpan} height={ paddingValues.top } />
+				</tr>
+			) : null }
+			<tr>
 				{ paddingValues.left > 0 ? (
 					<td width={ paddingValues.left } />
 				) : null }
-                <td style={{ color: parsers.color.stringify(color) }}>
-                    { children }
-                </td>
+				<td style={{ color: types.color.stringify(color) }}>
+					{ children }
+				</td>
 				{ paddingValues.right > 0 ? (
 					<td width={ paddingValues.right } />
 				) : null }
-            </tr>
-            { paddingValues.bottom > 0 ? (
-                <tr>
-                    <td colSpan={colSpan} height={ paddingValues.bottom } />
-                </tr>
-            ) : null }
-        </table>
+			</tr>
+			{ paddingValues.bottom > 0 ? (
+				<tr>
+					<td colSpan={colSpan} height={ paddingValues.bottom } />
+				</tr>
+			) : null }
+		</table>
     );
 };

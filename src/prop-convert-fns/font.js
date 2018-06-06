@@ -1,7 +1,6 @@
-import deleteProperties from '../helpers/object-delete-properties';
-import { parse as parseString } from '../parsers/string';
-import { parse as parseOneOf } from '../parsers/oneOf';
-import { parse as parseDimension } from '../parsers/dimension';
+import { parse as parseString } from '../types/string';
+import { parse as parseOneOf } from '../types/oneOf';
+import { parse as parseDimension } from '../types/dimension';
 
 export default props => {
 	const {
@@ -9,23 +8,16 @@ export default props => {
 		fontFamily,
 		fontWeight,
 		lineHeight,
-		...otherProps
+		...restProps
 	} = props;
 
-	const newProps = {
-		...otherProps,
+	return {
 		font: {
 			size: fontSize ? parseDimension(fontSize) : null,
 			family: fontFamily ? parseString(fontFamily) : null,
 			weight: fontWeight ? parseOneOf(fontWeight, ['normal', 'bold']) : null,
 			lineHeight: lineHeight ? parseDimension(lineHeight) : null,
-		}
+		},
+		...restProps
 	};
-
-	return deleteProperties(newProps, [
-		'fontSize',
-		'fontFamily',
-		'fontWeight',
-		'lineHeight'
-	]);
 };

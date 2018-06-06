@@ -1,5 +1,4 @@
-import deleteProperties from '../helpers/object-delete-properties';
-import { parse as parseDimensionBox, parseValues as parseDimensionBoxValues } from "../parsers/dimensionBox";
+import { parse as parseDimensionBox, parseValues as parseDimensionBoxValues } from "../types/dimensionBox";
 
 export default props => {
 	const {
@@ -11,17 +10,10 @@ export default props => {
 		...restProps
 	} = props;
 
-	const newProps = {
-		...restProps,
+	return {
 		padding: padding
 			? parseDimensionBox(padding)
-			: parseDimensionBoxValues(paddingTop, paddingRight, paddingBottom, paddingLeft)
+			: parseDimensionBoxValues(paddingTop, paddingRight, paddingBottom, paddingLeft),
+		...restProps
 	};
-
-	return deleteProperties(newProps, [
-		'paddingTop',
-		'paddingRight',
-		'paddingBottom',
-		'paddingLeft'
-	]);
 };

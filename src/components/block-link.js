@@ -1,6 +1,6 @@
 import IEBlockWrapper from './helpers/IEBlockWrapper';
 import { createElement } from 'eml-core';
-import parsers from '../parsers';
+import types from '../types';
 
 export default props => {
 	const {

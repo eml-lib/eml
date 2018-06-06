@@ -1,5 +1,4 @@
-import deleteProperties from '../helpers/object-delete-properties';
-import { parse as parseColor } from '../parsers/color';
+import { parse as parseColor } from '../types/color';
 
 export default props => {
 	const {
@@ -8,16 +7,12 @@ export default props => {
 		...restProps
 	} = props;
 
-	const newProps = {
-		...restProps,
-		background: (background || backgroundColor)
-			? {
+	return {
+		background: (
+			(background || backgroundColor) ? {
 				color: parseColor(background || backgroundColor)
-			}
-			: null
+			} : null
+		),
+		...restProps
 	};
-
-	return deleteProperties(newProps, [
-		'backgroundColor'
-	]);
 };

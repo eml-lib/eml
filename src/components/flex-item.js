@@ -2,7 +2,7 @@ import { createElement } from 'eml-core';
 import propConvertFns from '../prop-convert-fns';
 import composePropConvertFns from '../prop-convert-fns/helpers/compose';
 import BlockWrapper from './helpers/block-wrapper';
-import parsers from '../parsers';
+import types from '../types';
 
 const alignToHorizontal = {
 	'start': 'left',
@@ -44,12 +44,12 @@ export default props => {
 	return direction === 'row'
 		? (
 			<td
-				width={flex ? (parsers.number.parse(flex) / flexAmount * 100).toFixed() + '%' : null}
-				bgcolor={background && alignSelf === 'stretch' ? parsers.color.stringify(background.color) : null}
+				width={flex ? (types.number.parse(flex) / flexAmount * 100).toFixed() + '%' : null}
+				bgcolor={background && alignSelf === 'stretch' ? types.color.stringify(background.color) : null}
 				valign={alignToVertical[alignSelf]}
 			>
 				<BlockWrapper
-					padding={padding ? parsers.dimensionBox.parse(padding) : null}
+					padding={padding ? types.dimensionBox.parse(padding) : null}
 					background={alignSelf !== 'stretch' ? background : null}
 					fullWidth={true}
 				>
@@ -60,7 +60,7 @@ export default props => {
 		: (
 			<div align={alignToHorizontal[alignSelf]}>
 				<BlockWrapper
-					padding={padding ? parsers.dimensionBox.parse(padding) : null}
+					padding={padding ? types.dimensionBox.parse(padding) : null}
 					background={background}
 					fullWidth={alignSelf === 'stretch'}
 				>
