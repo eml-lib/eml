@@ -2,7 +2,6 @@ const { createElement, Fragment } = require('../eml-core/build.js');
 import IEBlockWrapper from './helpers/IEBlockWrapper';
 import isElement from './helpers/is-element';
 import parsers from '../parsers';
-import propParsers from './block-props';
 
 const packToAlign = {
 	'start': 'left',
@@ -40,7 +39,7 @@ const Block = props => {
 		alignSelf,
 
 		children
-	} = propParsers(props);
+	} = props;
 
 	const childrenFlexes = children.reduce(
 		(acc, child) => {

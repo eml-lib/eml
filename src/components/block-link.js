@@ -1,5 +1,5 @@
 import IEBlockWrapper from './helpers/IEBlockWrapper';
-const { createElement, Fragment } = require('../eml-core/build.js');
+import { createElement } from 'eml-core';
 import parsers from '../parsers';
 
 export default props => {
