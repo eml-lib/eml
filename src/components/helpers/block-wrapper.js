@@ -17,7 +17,7 @@ export default props => {
 		left: padding && padding.left ? padding.left.value : 0,
 		top: padding && padding.top ? padding.top.value : 0,
 		right: padding && padding.right ? padding.right.value : 0,
-		bottom: padding.bottom ? padding.bottom.value : 0
+		bottom: padding && padding.bottom ? padding.bottom.value : 0
 	};
 
     const contentColSize = 1;
