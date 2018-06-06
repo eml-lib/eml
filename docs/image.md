@@ -4,4 +4,4 @@ Props | Values | Description
 :--- | :--- | :--- |
 `width` | `<px>` |
 
-[Index page](index.md)
+[Index page](./index.md)

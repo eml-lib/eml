@@ -6,4 +6,4 @@ Props | Values | Description
 `color` | `<color>` |
 `text-decoration` | `underline \| none` |
 
-[Index page](index.md)
+[Index page](./index.md)

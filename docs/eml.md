@@ -6,4 +6,4 @@ Props | Values | Description
 `background-color` | `<color>` |
 `foreground-color` | `<color>` |
 
-[Index page](index.md)
+[Index page](./index.md)

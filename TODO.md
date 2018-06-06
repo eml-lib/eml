@@ -1,10 +1,10 @@
-`eml`
+[`eml`](./docs/eml.md)
 
 - [x] `max-width`
 - [x] `background-color`
 - [x] `foreground-color`
 
-`flex`
+[`flex`](./docs/flex.md)
 
 - [x] `direction`
 - [x] `align-items`
@@ -26,7 +26,7 @@
 - [ ] `margin-bottom`
 - [ ] `border`
 
-`flex-item`
+[`flex-item`](./docs/flex-item.md)
 
 - [x] `align-self`
 - [ ] `width`
@@ -39,16 +39,16 @@
 - [x] `padding-right`
 - [x] `padding-bottom`
 
-`link`
+[`link`](./docs/link.md)
 
 - [x] `to`
 - [x] `color`
 - [x] `text-decoration`
 
-`text`
+[`text`](./docs/text.md)
 
 - [x] `color`
 
-`image`
+[`image`](./docs/image.md)
 
 - [x] `width`

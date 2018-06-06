@@ -4,4 +4,4 @@ Props | Values | Description
 :--- | :--- | :--- |
 `color` | `<color>` |
 
-[Index page](index.md)
+[Index page](./index.md)

@@ -11,5 +11,5 @@ Props | Values | Description
 `padding-right` | `<number> \| <px>` |
 `padding-bottom` | `<number> \| <px>` |
 
-[Index page](index.md)
+[Index page](./index.md)
 
