@@ -1,6 +1,8 @@
+## Common
+
 - [ ] Query-based syntax ([] or device-fn)
 
-Components
+## Components
 
 [`eml`](./docs/eml.md)
 
