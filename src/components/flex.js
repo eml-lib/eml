@@ -1,8 +1,10 @@
-import { createElement, Fragment } from 'eml-core';
+import createElement from '../create-element';
+import Fragment from '../fragment';
 import types from '../types';
 import BlockWrapper from './helpers/block-wrapper';
-import propConvertFns from '../prop-convert-fns';
-import composePropConvertFns from '../prop-convert-fns/helpers/compose';
+
+// import propConvertFns from '../prop-convert-fns';
+// import composePropConvertFns from '../prop-convert-fns/helpers/compose';
 
 const alignToHorizontal = {
 	'start': 'left',
@@ -27,23 +29,19 @@ function renderFlexItem({ child, align, childrenFlexes, direction }) {
 
 function renderGap({ gap, direction }) {
 	return direction === 'row'
-		? /*gap.unit === '%'
-			? (
-				<td width={gap.value + '%'} />
-			)
-			:*/ (
-				<td>
-					<table cellPadding={0} cellSpacing={0} width={gap.value}>
-						<tr>
-							<td />
-						</tr>
-					</table>
-				</td>
-			)
+		? (
+			<td>
+				<table cellPadding="0" cellSpacing="0" width={gap}>
+					<tr>
+						<td />
+					</tr>
+				</table>
+			</td>
+		)
 		: (
-			<table cellPadding={0} cellSpacing={0}>
+			<table cellPadding="0" cellSpacing="0">
 				<tr>
-					<td height={gap.value} />
+					<td height={gap} />
 				</tr>
 			</table>
 		);
@@ -61,34 +59,23 @@ export default props => {
 		background,
 		color,
 		children
-	} = composePropConvertFns(props, [
-		propConvertFns.margin,
-		propConvertFns.padding,
-		propConvertFns.background
-	]);
-
-	const parsedGap = gap ? types.dimension.parse(gap) : null;
+	} = props;
 
 	const childrenFlexes = children.reduce(
-        (acc, { props: { flex } }) => flex ? acc + types.number.parse(flex) : acc,
+        (acc, { props: { flex } }) => flex ? acc + flex : acc,
         0
     );
 
 	const childNodes = children.map((child, i) => (
 		<Fragment>
-			{ parsedGap && parsedGap.value > 0 && i > 0 ? renderGap({ gap: parsedGap, direction }) : null }
+			{ gap && gap > 0 && i > 0 ? renderGap({ gap, direction }) : null }
 			{ renderFlexItem({ child, alignItems, childrenFlexes, direction }) }
 		</Fragment>
 	));
 
 	return direction === 'row'
 		? (
-			<BlockWrapper
-				padding={padding}
-				fullWidth={true}
-				background={background}
-				color={color}
-			>
+			<BlockWrapper padding={padding} fullWidth={true} background={background} color={color}>
 				<div align={ justifyContent ? alignToHorizontal[justifyContent] : 'left' }>
 					<table cellPadding="0" cellSpacing="0" border="0" width={ childrenFlexes > 0 || justifyContent === 'stretch' ? '100%' : null }>
 						<tr>
@@ -99,12 +86,7 @@ export default props => {
 			</BlockWrapper>
 		)
 		: (
-			<BlockWrapper
-				padding={padding}
-				fullWidth={true}
-				background={background}
-				color={color}
-			>
+			<BlockWrapper padding={padding} fullWidth={true} background={background} color={color}>
 				{ childNodes }
 			</BlockWrapper>
 		);

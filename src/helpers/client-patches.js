@@ -84,7 +84,7 @@ const outlookCom = {
     }
 };
 
-export const gmailMobileAppFullWidthBody = {
+export const gMailMobileAppFullWidthBody = {
     style: (
 `/* Force Gmail mobile app set full width to body */
 /* https://litmus.com/community/discussions/6950-full-width-on-gmail-app-for-ios */

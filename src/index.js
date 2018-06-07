@@ -1,9 +1,11 @@
-import emlCore from 'eml-core';
-import components from './components';
+import render from './render';
+import * as components from './components';
+import createElement from './create-element';
+import Fragment from './fragment';
 
-export default (eml, userSettings) => emlCore.parse(eml, {
-    components: {
-        ...components,
-        ...userSettings
-    }
-});
+export {
+	render,
+	components,
+	createElement,
+	Fragment
+}

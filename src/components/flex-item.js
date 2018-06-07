@@ -1,6 +1,6 @@
-import { createElement } from 'eml-core';
-import propConvertFns from '../prop-convert-fns';
-import composePropConvertFns from '../prop-convert-fns/helpers/compose';
+import createElement from '../create-element';
+// import propConvertFns from '../prop-convert-fns';
+// import composePropConvertFns from '../prop-convert-fns/helpers/compose';
 import BlockWrapper from './helpers/block-wrapper';
 import types from '../types';
 
@@ -36,20 +36,18 @@ export default props => {
 		direction,
 		flexAmount,
 		children
-	} = composePropConvertFns(props, [
-		propConvertFns.padding,
-		propConvertFns.background,
-	]);
+	} = props;
 
 	return direction === 'row'
 		? (
 			<td
-				width={flex ? (types.number.parse(flex) / flexAmount * 100).toFixed() + '%' : null}
-				bgcolor={background && alignSelf === 'stretch' ? types.color.stringify(background.color) : null}
+				width={flex ? (flex / flexAmount * 100).toFixed() + '%' : null}
+				// bgcolor={background && alignSelf === 'stretch' ? types.color.stringify(background.color) : null}
+				bgcolor={background && alignSelf === 'stretch' ? background.color : null}
 				valign={alignToVertical[alignSelf]}
 			>
 				<BlockWrapper
-					padding={padding ? types.dimensionBox.parse(padding) : null}
+					padding={padding}
 					background={alignSelf !== 'stretch' ? background : null}
 					fullWidth={true}
 				>
@@ -60,7 +58,7 @@ export default props => {
 		: (
 			<div align={alignToHorizontal[alignSelf]}>
 				<BlockWrapper
-					padding={padding ? types.dimensionBox.parse(padding) : null}
+					padding={padding}
 					background={background}
 					fullWidth={alignSelf === 'stretch'}
 				>

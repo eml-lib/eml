@@ -1,4 +1,4 @@
-import { createElement } from 'eml-core';
+import createElement from '../../create-element';
 import types from '../../types';
 
 export default props => {
@@ -28,7 +28,8 @@ export default props => {
 			cellSpacing="0"
 			border="0"
 			role="presentation"
-			bgColor={ background ? types.color.stringify(background.color) : null }
+			// bgColor={ background ? types.color.stringify(background.color) : null }
+			bgColor={ background ? background.color : null }
 			width={ fullWidth ? '100%' : null }
 			style={{
 				border,
@@ -44,7 +45,7 @@ export default props => {
 				{ paddingValues.left > 0 ? (
 					<td width={ paddingValues.left } />
 				) : null }
-				<td style={{ color: types.color.stringify(color) }}>
+				<td style={{ color: color ? types.color.stringify(color) : null }}>
 					{ children }
 				</td>
 				{ paddingValues.right > 0 ? (

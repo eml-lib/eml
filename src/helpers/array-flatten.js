@@ -1,0 +1,1 @@
+export default arr => arr.reduce((a, b) => a.concat(b), []);
