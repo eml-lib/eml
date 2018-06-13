@@ -3,6 +3,10 @@ import {
     outlookLineHeight,
     gMailMobileAppFullWidthBody
 } from '../helpers/client-patches';
+import { tableAsBlock as ieTableProps } from './helpers/ie-props';
+
+const msoOpen = '<!--[if mso]>';
+const msoClose = '<![endif]-->';
 
 const Eml = props => {
 	const {
@@ -14,25 +18,18 @@ const Eml = props => {
 
     return (
 		<body bgcolor={backgroundColor}>
-			{ '<!--[if mso]>' }
+			{ msoOpen }
 			<table
-				role="presentation" // Force accessibility reader to avoid pronounce table structure information (http://blog.gorebel.com/accessibility-in-email-part-ii/)
-				border="0"
-				cellPadding="0"
-				cellSpacing="0"
+				{...ieTableProps}
 				width={maxWidth}
 				bgcolor={foregroundColor}
 				className="wrapper"
 			>
 				<tr>
 					<td align="center">
-						{ '<![endif]-->' }
+						{ msoClose }
 						<div align="left" style={{ maxWidth: `${maxWidth}px`, backgroundColor: foregroundColor }}>
 							{ children.map(child => {
-								// const Child = child.type;
-								// const a = <Child {...child.props} width="100%"/>;
-								//
-								// console.log('child', a);
 
 								if (typeof child === 'object') {
 									return {
@@ -48,11 +45,11 @@ const Eml = props => {
 
 							}) }
 						</div>
-						{ '<!--[if mso]>' }
+						{ msoOpen }
 					</td>
 				</tr>
 			</table>
-			{ '<![endif]-->' }
+			{ msoClose }
 		</body>
     );
 };

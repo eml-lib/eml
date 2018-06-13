@@ -2,6 +2,7 @@ import createElement from '../create-element';
 import Fragment from '../fragment';
 import arrayPartition from '../helpers/array-partition';
 import insertBetween from '../helpers/array-insert-between';
+import { tableAsBlock as ieTableProps } from './helpers/ie-props';
 
 const msoOpen = '<!--[if mso]>';
 const msoClose = '<![endif]-->';
@@ -9,7 +10,7 @@ const notMsoOpen = '<!--[if !mso]><!-- -->';
 const notMsoClose = '<!--<![endif]-->';
 
 const renderRowGap = gap => (
-	<table cellPadding="0" cellSpacing="0">
+	<table {...ieTableProps}>
 		<tr>
 			<td height={gap} />
 		</tr>
@@ -18,7 +19,7 @@ const renderRowGap = gap => (
 
 const renderColumnGap = gap => (
 	<td>
-		<table cellPadding="0" cellSpacing="0" width={gap}>
+		<table {...ieTableProps} width={gap}>
 			<tr>
 				<td />
 			</tr>
@@ -83,7 +84,7 @@ export default props => {
 	return (
 		<Fragment>
 			{ msoOpen }
-			<table role="presentation" border="0" cellPadding="0" cellSpacing="0" width="100%">
+			<table {...ieTableProps} width="100%">
 				{ msoClose }
 
 				{ notMsoOpen }

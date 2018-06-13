@@ -1,5 +1,6 @@
 import createElement from '../../create-element';
 import types from '../../types';
+import { tableAsBlock as ieTableProps } from './ie-props';
 
 export default props => {
     const {
@@ -24,10 +25,7 @@ export default props => {
 
     return (
 		<table
-			cellPadding="0"
-			cellSpacing="0"
-			border="0"
-			role="presentation"
+			{...ieTableProps}
 			// bgColor={ background ? types.color.stringify(background.color) : null }
 			bgColor={ background ? background.color : null }
 			width={ fullWidth ? '100%' : null }
