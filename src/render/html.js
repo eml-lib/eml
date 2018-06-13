@@ -45,7 +45,11 @@ function renderTag(config, depth = 0) {
         const closingTag = `</${tagName}>`;
         const contentHtml = children.map(config => renderTag(config, depth + 1)).join('');
 
-        return tab + openingTag + '\n' + contentHtml + tab + closingTag + '\n';
+        return (
+        	tab + openingTag + '\n' +
+			contentHtml +
+			tab + closingTag + '\n'
+		);
     }
 }
 

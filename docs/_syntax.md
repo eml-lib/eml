@@ -40,3 +40,6 @@ function		[Aa-Zz]+{openParenthesis}
 
 ```
 
+
+## All clients
+style-background
