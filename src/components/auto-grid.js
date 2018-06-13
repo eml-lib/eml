@@ -73,12 +73,12 @@ const renderRows = (rows, gap) => {
 export default props => {
 	const {
 		size = 3,
-		gap,
+		gap = 0,
 		children
 	} = props;
 
 	const partitions = arrayPartition(children, size);
-	const childNodes = renderRows(partitions);
+	const childNodes = renderRows(partitions, gap);
 
 	return (
 		<Fragment>

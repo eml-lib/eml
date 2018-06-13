@@ -13,6 +13,7 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
+    "test": "jest",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
@@ -22,6 +23,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
     "eml-core": "0.0.211",
+    "jest": "^23.1.0",
     "rollup": "^0.55.0",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",

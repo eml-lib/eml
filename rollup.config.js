@@ -18,19 +18,7 @@ export default {
             include: ['node_modules/**', '../eml-core']
         }),
         babel({
-            exclude: 'node_modules/**',
-            presets: [
-                ['env', {
-                    modules: false
-                }],
-                'stage-3'
-            ],
-            plugins: [
-                'external-helpers',
-                ['transform-react-jsx', {
-                    pragma: 'createElement'
-                }]
-            ]
+            exclude: 'node_modules/**'
         }),
         // inject({
         //     createElement: 'eml-core/create-element'
