@@ -1,10 +1,23 @@
 {
   "presets": [
-    ["env", { "modules": false }],
     "stage-3"
   ],
   "plugins": [
-    "external-helpers",
     ["transform-react-jsx", { "pragma": "createElement" }]
-  ]
+  ],
+  "env": {
+    "development": {
+      "presets": [
+        ["env", { "modules": false }]
+      ],
+      "plugins": [
+        "external-helpers"
+      ]
+    },
+    "test": {
+      "presets": [
+        "env"
+      ]
+    }
+  }
 }

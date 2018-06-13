@@ -14,6 +14,7 @@ export default {
     plugins: [
         // Changes package path to relative
         nodeResolve(),
+        // // Convert CommonJS modules to ES6, so they can be included in a Rollup bundle
         commonJs({
             include: ['node_modules/**', '../eml-core']
         }),
