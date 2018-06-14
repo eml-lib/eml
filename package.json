@@ -1,8 +1,8 @@
 {
   "name": "eml",
-  "version": "0.0.112",
+  "version": "0.0.113",
   "author": "Vlad Trushin",
-  "description": "EML core",
+  "description": "EML",
   "homepage": "https://github.com/eml-lib/eml",
   "repository": "eml-lib/eml",
   "main": "build.js",
@@ -11,8 +11,8 @@
     "README.md"
   ],
   "scripts": {
-    "build": "rollup -c",
-    "watch": "rollup -c -w",
+    "build": "rollup --config --environment BABEL_ENV:development",
+    "watch": "rollup --config --watch --environment BABEL_ENV:development",
     "test": "jest",
     "prepublishOnly": "npm run build"
   },

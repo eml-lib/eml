@@ -7,16 +7,25 @@
   ],
   "env": {
     "development": {
-      "presets": [
-        ["env", { "modules": false }]
-      ],
       "plugins": [
         "external-helpers"
+      ],
+      "presets": [
+        ["env", {
+          "modules": false,
+          "targets": {
+            "node": "current"
+          }
+        }]
       ]
     },
     "test": {
       "presets": [
-        "env"
+        ["env", {
+          "targets": {
+            "node": "current"
+          }
+        }]
       ]
     }
   }
