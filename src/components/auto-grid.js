@@ -3,11 +3,7 @@ import Fragment from '../fragment';
 import arrayPartition from '../helpers/array-partition';
 import insertBetween from '../helpers/array-insert-between';
 import { tableAsBlock as ieTableProps } from './helpers/ie-props';
-
-const msoOpen = '<!--[if mso]>';
-const msoClose = '<![endif]-->';
-const notMsoOpen = '<!--[if !mso]><!-- -->';
-const notMsoClose = '<!--<![endif]-->';
+import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 
 const renderRowGap = gap => (
 	<table {...ieTableProps}>
