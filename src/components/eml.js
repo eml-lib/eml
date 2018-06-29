@@ -1,4 +1,5 @@
-import createElement from '../create-element';
+import core from 'eml-core';
+const { createElement, Fragment } = core;
 import { outlookLineHeight, gMailMobileAppFullWidthBody } from '../helpers/client-patches';
 import { tableAsBlock as ieTableProps } from './helpers/ie-props';
 import { msoOpen, msoClose } from './helpers/conditional-comments';

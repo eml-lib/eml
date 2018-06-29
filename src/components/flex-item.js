@@ -1,4 +1,5 @@
-import createElement from '../create-element';
+import core from 'eml-core';
+const { createElement, Fragment } = core;
 // import propConvertFns from '../prop-convert-fns';
 // import composePropConvertFns from '../prop-convert-fns/helpers/compose';
 import BlockWrapper from './helpers/block-wrapper';

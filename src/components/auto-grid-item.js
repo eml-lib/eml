@@ -1,23 +1,41 @@
-import createElement from '../create-element';
-import Fragment from '../fragment';
+import core from 'eml-core';
+const { createElement, Fragment } = core;
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
+import BlockWrapper from './helpers/block-wrapper';
 
-export default props => {
+const AutoGridIem = props => {
 	const {
-		span,
-		hasGap,
+		span = 1,
+		backgroundColor,
+		_gapLeft,
+		_gapRight,
+		_width,
 		children
 	} = props;
 
-	return (
+    return (
 		<Fragment>
-			{ msoOpen }
-			<td>
-				{ msoClose }
-				{ children }
-				{ msoOpen }
+			<td colSpan={span > 1 ? span : null} width={_width}>
+                <BlockWrapper
+					paddingLeft={_gapLeft}
+					paddingRight={_gapRight}
+                    fullWidth={true}
+				>
+					<BlockWrapper
+                        background={backgroundColor ? { color: backgroundColor } : null}
+					>
+						{ children }
+					</BlockWrapper>
+				</BlockWrapper>
 			</td>
-			{ msoClose }
 		</Fragment>
 	);
 };
+
+AutoGridIem.css = {
+	'.auto-grid-item': {
+		flexGrow: 1
+	}
+};
+
+export default AutoGridIem;

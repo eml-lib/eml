@@ -1,5 +1,5 @@
-import createElement from '../create-element';
-import Fragment from '../fragment';
+import core from 'eml-core';
+const { createElement, Fragment } = core;
 import types from '../types';
 import BlockWrapper from './helpers/block-wrapper';
 
@@ -47,7 +47,7 @@ function renderGap({ gap, direction }) {
 		);
 }
 
-export default props => {
+const Flex = props => {
 	const {
 		direction,
 		alignItems,
@@ -90,4 +90,10 @@ export default props => {
 				{ childNodes }
 			</BlockWrapper>
 		);
-}
+};
+
+Flex.css = {
+
+};
+
+export default Flex;

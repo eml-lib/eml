@@ -20,10 +20,7 @@ export default {
         }),
         babel({
             exclude: 'node_modules/**'
-        }),
-        // inject({
-        //     createElement: 'eml-core/create-element'
-        // })
+        })
     ],
     watch: {
         include: 'src/**/*.js',

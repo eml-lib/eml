@@ -1,10 +1,29 @@
-import createElement from '../../create-element';
+import core from 'eml-core';
+const { createElement, Fragment } = core;
+// import { createElement, Fragment } from 'eml-core';
 import types from '../../types';
 import { tableAsBlock as ieTableProps } from './ie-props';
 
+const renderYPadding = (padding, colSpan) => (
+	padding > 0 ? (
+		<tr>
+			<td colSpan={colSpan} height={value} />
+		</tr>
+	) : null
+);
+
+const renderXPadding = (padding) => (
+	padding > 0 ? (
+		<td width={padding} />
+	) : null
+);
+
 export default props => {
     const {
-        padding,
+    	paddingLeft = 0,
+		paddingTop = 0,
+		paddingRight = 0,
+		paddingBottom = 0,
         background,
         color,
         fullWidth = false,
@@ -13,15 +32,8 @@ export default props => {
         children
     } = props;
 
-	const paddingValues = {
-		left: padding && padding.left ? padding.left.value : 0,
-		top: padding && padding.top ? padding.top.value : 0,
-		right: padding && padding.right ? padding.right.value : 0,
-		bottom: padding && padding.bottom ? padding.bottom.value : 0
-	};
-
     const contentColSize = 1;
-    const colSpan = contentColSize + [paddingValues.left, paddingValues.right].filter(value => value > 0).length;
+    const colSpan = contentColSize + [paddingLeft, paddingRight].filter(value => value > 0).length;
 
     return (
 		<table
@@ -31,30 +43,20 @@ export default props => {
 			width={ fullWidth ? '100%' : null }
 			style={{
 				border,
-				borderRadius: borderRadius ? types.dimension.stringify(borderRadius) : null
+				// borderRadius: borderRadius ? types.dimension.stringify(borderRadius) : null
 			}}
 		>
-			{ paddingValues.top > 0 ? (
-				<tr>
-					<td colSpan={colSpan} height={ paddingValues.top } />
-				</tr>
-			) : null }
+			{ renderYPadding(paddingTop, colSpan) }
 			<tr>
-				{ paddingValues.left > 0 ? (
-					<td width={ paddingValues.left } />
-				) : null }
-				<td style={{ color: color ? types.color.stringify(color) : null }}>
+				{ renderXPadding(paddingLeft) }
+				<td
+					// style={{ color: color ? types.color.stringify(color) : null }}
+				>
 					{ children }
 				</td>
-				{ paddingValues.right > 0 ? (
-					<td width={ paddingValues.right } />
-				) : null }
+				{ renderXPadding(paddingRight) }
 			</tr>
-			{ paddingValues.bottom > 0 ? (
-				<tr>
-					<td colSpan={colSpan} height={ paddingValues.bottom } />
-				</tr>
-			) : null }
+			{ renderYPadding(paddingBottom, colSpan) }
 		</table>
     );
 };
