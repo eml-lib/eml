@@ -2,8 +2,8 @@
 
 Props | Values | Description
 :--- | :--- | :--- |
-`to` | `<string>` |
+`to` | `<url>` |
 `color` | `<color>` |
-`text-decoration` | `underline \| none` |
+`noUnderline` | `<boolean>` |
 
 [Index page](./index.md)

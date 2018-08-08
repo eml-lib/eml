@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`inline 1`] = `
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
+		<style type="text/css">
+			{/*renderCss(cssList)*/}
+		</style>
+	</head>
+	<a href="about:blank" style="text-decoration: underline">
+	Text
+</a>
+
+</html>
+`;
+
+exports[`padding 1`] = `
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
+		<style type="text/css">
+			{/*renderCss(cssList)*/}
+		</style>
+	</head>
+	<!--[if mso]>
+<table cellpadding="0" cellspacing="0" border="0" role="presentation" width="100%" style="">
+	<tr>
+		<td colspan="3" height="10">
+		</td>
+	</tr>
+	<tr>
+		<td width="10">
+		</td>
+		<td style="">
+			<a href="about:blank">
+				<![endif]-->
+				<!--[if !mso]><!-- -->
+				<a href="about:blank" style="display: inline-block; padding: 10px 10px 10px 10px">
+					<!--<![endif]-->
+					Text
+					<!--[if !mso]><!-- -->
+				</a>
+				<!--<![endif]-->
+				<!--[if mso]>
+			</a>
+		</td>
+		<td width="10">
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3" height="10">
+		</td>
+	</tr>
+</table>
+<![endif]-->
+
+</html>
+`;
+
+exports[`width and height 1`] = `
+<!--[if mso]>
+<table cellpadding="0" cellspacing="0" border="0" role="presentation" width="100%" style="">
+	
+	<tr>
+		
+		<td style="">
+			<a href="about:blank">
+				<![endif]-->
+				<!--[if !mso]><!-- -->
+				<a href="about:blank" style="styles: [object Object]">
+					<!--<![endif]-->
+					Text
+					<!--[if !mso]><!-- -->
+				</a>
+				<!--<![endif]-->
+				<!--[if mso]>
+			</a>
+		</td>
+		
+	</tr>
+	
+</table>
+<![endif]-->
+
+`;

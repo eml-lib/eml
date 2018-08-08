@@ -1,3 +1,4 @@
+
 ```
 padding="10px, 240w: 0"
 // all: 10px
@@ -36,7 +37,11 @@ function		[Aa-Zz]+{openParenthesis}
 
 
 
+// Padding for `td`
+mso-padding-alt: 10px 20px 30px 40px;
 
+// bg-color
+mso-pattern: #00ff00 solid;
 
 ```
 

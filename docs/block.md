@@ -1,9 +1,8 @@
-# Image
+# Block
 
 Props | Values | Description
 :--- | :--- | :--- |
 `width` | `<px>` |
 `height` | `<px>` |
-`alt` | `<string>` |
 
 [Index page](./index.md)

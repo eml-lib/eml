@@ -1,8 +1,9 @@
 # Components
 
 - [`eml`](./eml.md)
-- [`flex`](./flex.md)
-- [`flex-item`](./flex-item.md)
-- [`image`](./image.md)
-- [`link`](./link.md)
 - [`text`](./text.md)
+- [`block`](./block.md)
+- [`link`](./link.md)
+- [`image`](./image.md)
+- [`flex`](./flex.md)
+- [`auto-grid`](./auto-grid.md)

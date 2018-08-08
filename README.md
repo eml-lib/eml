@@ -1,4 +1,4 @@
 # EML
+Email markup language
 
-## License
-MIT
+[Components documentation](./docs/index.md)

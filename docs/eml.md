@@ -2,8 +2,9 @@
 
 Props | Values | Description
 :--- | :--- | :--- |
-`max-width` | `<number> \| <px>` |
-`background-color` | `<color>` |
-`foreground-color` | `<color>` |
+`previewText` | `<string>` |
+`?maxWidth` | `<number> \| <px>` |
+`backgroundColor` | `<color>` |
+`?foregroundColor` | `<color>` |
 
 [Index page](./index.md)

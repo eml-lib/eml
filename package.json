@@ -17,23 +17,34 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
+    "@types/jest": "^23.1.4",
     "babel-core": "^6.26.3",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
-    "eml-core": "0.0.217",
-    "jest": "^23.1.0",
+    "eml-core": "../eml-core",
+    "jest": "^23.3.0",
     "rollup": "^0.60.4",
     "rollup-plugin-babel": "^3.0.4",
     "rollup-plugin-commonjs": "^9.1.3",
+    "rollup-plugin-json": "^3.0.0",
     "rollup-plugin-node-resolve": "^3.3.0"
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "<rootDir>/jest-serializer.js"
+    ]
   },
   "bugs": {
     "url": "https://github.com/eml-lib/eml/issues"
   },
   "license": "ISC",
   "dependencies": {
-    "css-color-converter": "^1.1.0"
+    "classnames": "^2.2.6",
+    "css-color-converter": "^1.1.0",
+    "prop-types": "^15.6.2",
+    "url-regex": "^4.1.1"
   }
 }
