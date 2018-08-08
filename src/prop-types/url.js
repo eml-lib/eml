@@ -3,7 +3,7 @@ import urlRegexp from 'url-regex';
 const createUrlPropType = isRequired => (props, propName, componentName) => {
 	const value = props[propName];
 
-	if (value == null && isRequired) {
+	if ((value === null || value === undefined) && isRequired) {
 		return new TypeError(`\`${componentName}\`: prop \`${propName}\` is required.`);
 	}
 

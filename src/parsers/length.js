@@ -44,5 +44,5 @@ export const stringifyHtmlAttr = dimension => (
 );
 
 export const validate = (value, unitTypes = []) => {
-
+	
 };

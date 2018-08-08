@@ -1,5 +1,5 @@
 export { default as Eml } from './eml';
-// export { default as Text } from './text';
+export { default as Text } from './text';
 export { default as Link } from './link';
 export { default as Block } from './block';
 export { default as Image } from './image';

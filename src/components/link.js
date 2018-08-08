@@ -1,9 +1,9 @@
 import { createElement, Fragment, renderHtmlAttributes } from 'eml-core';
 import propTypes from 'prop-types';
 import url from '../prop-types/url';
-import { parse as parseLength, stringifyStyle as stringifyStyleLength, stringifyHtmlAttr as stringifyHtmlAttrLength } from '../converters/length';
-import { parse as parseDimensionBox, stringify as stringifyDimensionBox } from '../converters/dimension-box';
-import { parse as parseColor, stringify as stringifyColor } from '../converters/color';
+import * as lengthParser from '../parsers/length';
+import * as colorParser from '../parsers/color';
+import * as dimensionBoxParser from '../parsers/dimension-box';
 import { tableAsBlock as ieTableProps } from './helpers/ie-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 const { bool } = propTypes;
@@ -37,23 +37,23 @@ const Link = props => {
 		children
 	} = props;
 
-	const converted = {
-		width: width ? parseLength(width, 'px') : null,
-		height: height ? parseLength(height, 'px') : null,
-		backgroundColor: backgroundColor ? parseColor(backgroundColor) : null,
-		color: color ? parseColor(color) : null,
-		padding: parseDimensionBox(padding)
+	const parsedProps = {
+		width: width ? lengthParser.parse(width, 'px') : null,
+		height: height ? lengthParser.parse(height, 'px') : null,
+		backgroundColor: backgroundColor ? colorParser.parse(backgroundColor) : null,
+		color: color ? colorParser.parse(color) : null,
+		padding: dimensionBoxParser.parse(padding)
 	};
 
 	const isBlock = (
-		[converted.padding.top, converted.padding.right, converted.padding.bottom, converted.padding.left].some(length => length.value !== 0)
-		|| converted.width
-		|| converted.height
+		[parsedProps.padding.top, parsedProps.padding.right, parsedProps.padding.bottom, parsedProps.padding.left].some(length => length.value !== 0)
+		|| parsedProps.width
+		|| parsedProps.height
 	);
 
 	const commonStyles = {
-		backgroundColor: converted.backgroundColor ? stringifyColor(converted.backgroundColor) : null,
-		color: converted.color ? stringifyColor(converted.color) : null,
+		backgroundColor: parsedProps.backgroundColor ? colorParser.stringify(parsedProps.backgroundColor) : null,
+		color: parsedProps.color ? colorParser.stringify(parsedProps.color) : null,
 		textDecoration: noUnderline ? 'none' : 'underline'
 	};
 
@@ -63,23 +63,23 @@ const Link = props => {
 				{ msoOpen }
 				<table
 					{...ieTableProps}
-					bgcolor={converted.backgroundColor ? stringifyColor(converted.backgroundColor) : null}
-					width={converted.width ? stringifyHtmlAttrLength(converted.width) : null}
+					bgcolor={parsedProps.backgroundColor ? colorParser.stringify(parsedProps.backgroundColor) : null}
+					width={parsedProps.width ? lengthParser.stringifyHtmlAttr(parsedProps.width) : null}
 					style={{ border: border || null }}
 				>
 					<td
 						align="center"
 						valign="middle"
-						height={converted.height ? stringifyHtmlAttrLength(converted.height) : null}
+						height={parsedProps.height ? lengthParser.stringifyHtmlAttr(parsedProps.height) : null}
 					>
 						<a href={to} style={{
 							...commonStyles,
-							msoPaddingAlt: converted.padding ? stringifyDimensionBox(converted.padding) : null,
+							msoPaddingAlt: parsedProps.padding ? dimensionBoxParser.stringify(parsedProps.padding) : null,
 							// Без `borderTop` и `borderBottom` не будет работать `msoPaddingAlt`
-							...(converted.backgroundColor ? {
-								borderTop: `1px solid ${stringifyColor(converted.backgroundColor)}`,
-								borderBottom: `1px solid ${stringifyColor(converted.backgroundColor)}`
-							} : {})
+							...(parsedProps.backgroundColor && {
+								borderTop: `1px solid ${colorParser.stringify(parsedProps.backgroundColor)}`,
+								borderBottom: `1px solid ${colorParser.stringify(parsedProps.backgroundColor)}`
+							})
 						}}>
 							{ msoClose }
 							{ notMsoOpen }
@@ -87,10 +87,10 @@ const Link = props => {
 								...commonStyles,
 								display: 'inline-block',
 								boxSizing: 'border-box',
-								padding: stringifyDimensionBox(converted.padding),
-								width: converted.width ? stringifyStyleLength(converted.width) : null,
-								height: converted.height ? stringifyStyleLength(converted.height) : null,
-								lineHeight: converted.height ? stringifyStyleLength(converted.height) : null,
+								padding: dimensionBoxParser.stringify(parsedProps.padding),
+								width: parsedProps.width ? lengthParser.stringifyStyle(parsedProps.width) : null,
+								height: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
+								lineHeight: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
 								textAlign: 'center',
 								border: border || null,
 								borderRadius: borderRadius || null
@@ -115,7 +115,7 @@ const Link = props => {
 				style={{
 					...commonStyles,
 					...(isBlock ? { display: 'inline-block' } : null),
-					padding: stringifyDimensionBox(converted.padding)
+					padding: dimensionBoxParser.stringify(parsedProps.padding)
 				}}
 			>
 				{ children }

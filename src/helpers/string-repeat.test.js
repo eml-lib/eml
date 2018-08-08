@@ -1,6 +1,6 @@
 import { repeatImpl as repeat } from './string-repeat';
 
-it('digit', () => {
+it('regular', () => {
 	expect(
 		repeat('A', 5)
 	).toEqual(

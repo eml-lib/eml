@@ -1,12 +1,13 @@
 import { createElement, Fragment, renderHtml } from 'eml-core';
 import propTypes from 'prop-types';
+import color from '../prop-types/color';
 import repeat from '../helpers/string-repeat';
-import { parse as parseLength, stringifyStyle as stringifyStyleLength, stringifyHtmlAttr as stringifyHtmlAttrLength } from '../converters/length';
-import { parse as parseColor, stringify as stringifyColor } from '../converters/color';
+import * as lengthParser from '../parsers/length';
+import * as colorParser from '../parsers/color';
 import { tableAsBlock as ieTableProps } from './helpers/ie-props';
 import { msoOpen, msoLteVersion, msoGteVersion, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 
-const { string, oneOf } = propTypes;
+const { string } = propTypes;
 
 // Insert &zwnj;&nbsp; hack after hidden preview text
 const preview = text => (
@@ -35,19 +36,22 @@ const tableSpacing = 'table { mso-table-lspace: 0pt; mso-table-rspace: 0pt }';
 
 const Eml = props => {
 	const {
+		previewText,
+		fontFamily,
+		backgroundColor,
+
+		// ???
 		maxWidth,
 		align,
-		fontFamily,
-		previewText,
-		backgroundColor,
 		foregroundColor,
+
 		children
 	} = props;
 
-	const converted = {
-		maxWidth: maxWidth ? parseLength(maxWidth, ['px', '%']) : null,
-		backgroundColor: backgroundColor ? parseColor(backgroundColor) : null,
-		foregroundColor: foregroundColor ? parseColor(foregroundColor) : null
+	const parsedProps = {
+		maxWidth: maxWidth ? lengthParser.parse(maxWidth, ['px', '%']) : null,
+		backgroundColor: backgroundColor ? colorParser.parse(backgroundColor) : null,
+		foregroundColor: foregroundColor ? colorParser.parse(foregroundColor) : null
 	};
 
 	return (
@@ -93,14 +97,14 @@ const Eml = props => {
 					</style>
 					{ msoClose }
 				</head>
-				<body bgcolor={backgroundColor ? stringifyColor(converted.backgroundColor) : null}>
+				<body bgcolor={backgroundColor ? colorParser.stringify(parsedProps.backgroundColor) : null}>
 					{ previewText && preview(previewText) }
 
 					{ notMsoOpen }
 					<div style={{
-						maxWidth: converted.maxWidth ? stringifyStyleLength(converted.maxWidth) : null,
+						maxWidth: parsedProps.maxWidth ? lengthParser.stringifyStyle(parsedProps.maxWidth) : null,
 						margin: align === 'center' ? '0 auto' : align === 'end' ? '0 0 0 auto' : null,
-						backgroundColor: converted.foregroundColor ? stringifyColor(converted.foregroundColor) : null
+						backgroundColor: parsedProps.foregroundColor ? colorParser.stringify(parsedProps.foregroundColor) : null
 					}} className="wrapper">
 						{ notMsoClose }
 						{ msoOpen }
@@ -109,8 +113,8 @@ const Eml = props => {
 								<td align={align === 'center' ? 'center' : align === 'end' ? 'right' : null}>
 									<table
 										{...ieTableProps}
-										width={converted.maxWidth ? stringifyHtmlAttrLength(converted.maxWidth) : '100%'}
-										bgcolor={converted.foregroundColor ? stringifyColor(converted.foregroundColor) : null}
+										width={parsedProps.maxWidth ? lengthParser.stringifyHtmlAttr(parsedProps.maxWidth) : '100%'}
+										bgcolor={parsedProps.foregroundColor ? colorParser.stringify(parsedProps.foregroundColor) : null}
 									>
 										<tr>
 											<td align="left">
@@ -167,9 +171,9 @@ Eml.defaultProps = {
 };
 
 Eml.propTypes = {
-	align: oneOf(['start', 'center', 'end']),
+	previewText: string,
 	fontFamily: string,
-	previewText: string
+	backgroundColor: color
 };
 
 export default Eml;

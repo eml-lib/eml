@@ -1,9 +1,9 @@
-import classNames from 'classnames';
 import { createElement, isElement, Component, Fragment } from 'eml-core';
+import propTypes from 'prop-types';
+import classNames from 'classnames';
+import * as dimensionBoxParser from '../parsers/dimension-box';
 import { tableAsBlock as ieTableProps } from './helpers/ie-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
-import propTypes from 'prop-types';
-import { parse as parseDimensionBox, stringify as stringifyDimensionBox } from '../converters/dimension-box';
 
 const { number, oneOf } = propTypes;
 
@@ -52,8 +52,8 @@ export default class Flex extends Component {
 	constructor(props) {
 		super(props);
 
-		this.converted = {
-			padding: parseDimensionBox(props.padding)
+		this.parsedProps = {
+			padding: dimensionBoxParser.parse(props.padding)
 		};
 	}
 
@@ -70,7 +70,7 @@ export default class Flex extends Component {
 				<table bgcolor={background} width="100%">
 					<tr>
 						<td style={{
-							msoPaddingAlt: this.converted.padding ? stringifyDimensionBox(this.converted.padding) : null
+							msoPaddingAlt: this.parsedProps.padding ? dimensionBoxParser.stringify(this.parsedProps.padding) : null
 						}}>
 							{ msoClose }
 							{ notMsoOpen }
@@ -79,7 +79,7 @@ export default class Flex extends Component {
 								style={{
 									color,
 									background,
-									padding: this.converted.padding ? stringifyDimensionBox(this.converted.padding) : null
+									padding: this.parsedProps.padding ? dimensionBoxParser.stringify(this.parsedProps.padding) : null
 								}}
 							>
 								{ notMsoClose }
@@ -144,14 +144,12 @@ export default class Flex extends Component {
 		let alignSelf = null;
 
 		if (isElement(child)) {
-			const props = child.props;
-
-			alignSelf = props.flexAlignSelf || alignItems;
+			alignSelf = child.props.flexAlignSelf || alignItems;
 			content = {
 				...child,
 				props: {
-					...props,
-					width: alignSelf === 'stretch' ? '100%' : props.width,
+					...child.props,
+					width: alignSelf === 'stretch' ? '100%' : child.props.width,
 					flex: null,
 					flexAlignSelf: null
 				}

@@ -1,8 +1,9 @@
 import { createElement, Fragment } from 'eml-core';
 import propTypes from 'prop-types';
-import { parse as parseLength, stringifyStyle as stringifyStyleLength, stringifyHtmlAttr as stringifyHtmlAttrLength } from '../converters/length';
-import { parse as parseDimensionBox, stringify as stringifyDimensionBox } from '../converters/dimension-box';
-import { parse as parseColor, stringify as stringifyColor } from '../converters/color';
+import color from '../prop-types/color';
+import * as lengthParser from '../parsers/length';
+import * as colorParser from '../parsers/color';
+import * as dimensionBoxParser from '../parsers/dimension-box';
 import { tableAsBlock as ieTableProps } from './helpers/ie-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 
@@ -44,43 +45,43 @@ const Block = props => {
         children
     } = props;
 
-    const converted = {
-		width: width ? parseLength(width, 'px') : null,
-		height: height ? parseLength(height, 'px') : null,
-		padding: parseDimensionBox(padding),
-		backgroundColor: backgroundColor ? parseColor(backgroundColor) : null,
-		color: color ? parseColor(color) : null,
+    const parsedProps = {
+		width: width ? lengthParser.parse(width, 'px') : null,
+		height: height ? lengthParser.parse(height, 'px') : null,
+		padding: dimensionBoxParser.parse(padding),
+		backgroundColor: backgroundColor ? colorParser.parse(backgroundColor) : null,
+		color: color ? colorParser.parse(color) : null,
 	};
 
     const contentColSize = 1;
-    const colSpan = contentColSize + [converted.padding.left, converted.padding.right].filter(Boolean).length;
+    const colSpan = contentColSize + [parsedProps.padding.left, parsedProps.padding.right].filter(Boolean).length;
 
 	return (
     	<Fragment>
 			{ msoOpen }
 			<table
 				{...ieTableProps}
-				bgcolor={ converted.backgroundColor ? stringifyColor(converted.backgroundColor) : null }
-				width={ converted.width ? stringifyHtmlAttrLength(converted.width) : null }
+				bgcolor={ parsedProps.backgroundColor ? colorParser.stringify(parsedProps.backgroundColor) : null }
+				width={ parsedProps.width ? lengthParser.stringifyHtmlAttr(parsedProps.width) : null }
 				style={{ border }}
 			>
-				{ renderYPadding(converted.padding.top, colSpan) }
+				{ renderYPadding(parsedProps.padding.top, colSpan) }
 				<tr>
-					{ renderXPadding(converted.padding.left) }
+					{ renderXPadding(parsedProps.padding.left) }
 					<td
-						height={ converted.height ? converted.height.value - (converted.padding.top + converted.padding.bottom) : null }
+						height={ parsedProps.height ? parsedProps.height.value - (parsedProps.padding.top + parsedProps.padding.bottom) : null }
 						valign="top"
-						style={{ color: converted.color ? stringifyColor(converted.color) : null }}
+						style={{ color: parsedProps.color ? colorParser.stringify(parsedProps.color) : null }}
 					>
 						{ msoClose }
 						{ notMsoOpen }
 						<div
 							className="block"
 							style={{
-								width: converted.width ? stringifyStyleLength(converted.width) : null,
-								height: converted.height ? stringifyStyleLength(converted.height) : null,
-								padding: stringifyDimensionBox(converted.padding),
-								backgroundColor: converted.backgroundColor ? stringifyColor(converted.backgroundColor) : null
+								width: parsedProps.width ? lengthParser.stringifyStyle(parsedProps.width) : null,
+								height: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
+								padding: dimensionBoxParser.stringify(parsedProps.padding),
+								backgroundColor: parsedProps.backgroundColor ? colorParser.stringify(parsedProps.backgroundColor) : null
 							}}
 						>
 							{ notMsoClose }
@@ -90,9 +91,9 @@ const Block = props => {
 						{ notMsoClose }
 						{ msoOpen }
 					</td>
-					{ renderXPadding(converted.padding.right) }
+					{ renderXPadding(parsedProps.padding.right) }
 				</tr>
-				{ renderYPadding(converted.padding.bottom, colSpan) }
+				{ renderYPadding(parsedProps.padding.bottom, colSpan) }
 			</table>
 			{ msoClose }
 		</Fragment>
@@ -105,7 +106,9 @@ Block.defaultProps = {
 
 Block.propTypes = {
 	fontSize: number,
-	fontWeight: oneOf(['normal', 'bold'])
+	fontWeight: oneOf(['normal', 'bold']),
+	backgroundColor: color,
+	color: color
 };
 
 Block.css = {
