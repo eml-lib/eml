@@ -8,8 +8,12 @@ export default handler => {
 	const createPropType = isRequired => (props, propName, componentName) => {
 		const value = props[propName];
 
-		if ((value === null || value === undefined) && isRequired) {
-			return new TypeError(`\`${componentName}\`: prop \`${propName}\` is required.`);
+		if (value === null || value === undefined) {
+			if (isRequired) {
+				return new TypeError(`\`${componentName}\`: prop \`${propName}\` is required.`);
+			}
+
+			return;
 		}
 
 		if (handler) {

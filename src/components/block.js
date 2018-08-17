@@ -1,9 +1,12 @@
 import { createElement, Fragment } from 'eml-core';
 import { text, decoration, block } from '../prop-types';
 import * as lengthParser from '../parsers/length';
-import * as colorParser from '../parsers/color';
+import { convert as convertColor } from '../parsers/color';
+import compose from '../parsers/compose';
 import convertText from '../parsers/text';
 import convertBorder from '../parsers/border';
+import convertBackground from '../parsers/border';
+import convertMargin from '../parsers/margin';
 import * as dimensionBoxParser from '../parsers/dimension-box';
 import { tableAsBlock as msoTableProps } from './helpers/mso-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
@@ -37,12 +40,6 @@ const Block = props => {
 		minHeight,
 		maxHeight,
 
-		margin,
-		marginTop,
-		marginRight,
-		marginBottom,
-		marginLeft,
-
 		padding,
 		paddingTop,
 		paddingRight,
@@ -52,11 +49,11 @@ const Block = props => {
         children
     } = props;
 
-    const textStyles = convertText(props);
-    const borderStyles = convertBorder(props);
+	const commonStyles = {
+		...compose(props, [convertText, convertBorder, convertMargin])
+	};
 
-    const color = props.color ? colorParser.convert(props.color) : null;
-    const backgroundColor = props.backgroundColor ? colorParser.convert(props.backgroundColor) : null;
+    const color = props.color ? convertColor(props.color) : null;
 
     const parsedProps = {
 		width: width ? lengthParser.parse(width, ['px', '%']) : null,
@@ -72,11 +69,10 @@ const Block = props => {
 			{ msoOpen }
 			<table
 				{...msoTableProps}
-				bgcolor={ backgroundColor }
+				bgcolor={ props.backgroundColor ? convertColor(props.backgroundColor) : null }
 				width={ parsedProps.width ? lengthParser.stringifyHtmlAttr(parsedProps.width) : '100%' }
 				style={{
-					...textStyles,
-					...borderStyles
+					...commonStyles
 				}}
 			>
 				{ renderYPadding(parsedProps.padding.top, colSpan) }
@@ -94,10 +90,9 @@ const Block = props => {
 							width: parsedProps.width ? lengthParser.stringifyStyle(parsedProps.width) : null,
 							height: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
 							padding: dimensionBoxParser.stringify(parsedProps.padding),
-							backgroundColor,
+							...convertBackground(props),
 							color,
-							...textStyles,
-							...borderStyles
+							...commonStyles
 						}}>
 							{ notMsoClose }
 							{ children }

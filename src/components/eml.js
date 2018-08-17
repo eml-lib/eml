@@ -2,7 +2,7 @@ import { createElement, Fragment, renderHtml } from 'eml-core';
 import propTypes from 'prop-types';
 import color from '../prop-types/color';
 import repeat from '../helpers/string-repeat';
-import * as colorParser from '../parsers/color';
+import { convert as convertColor } from '../parsers/color';
 import { msoOpen, msoLteVersion, msoGteVersion, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 
 const { string } = propTypes;
@@ -53,14 +53,11 @@ const Eml = props => {
 	const {
 		previewText,
 		fontFamily,
-		backgroundColor,
 
 		children
 	} = props;
 
-	const convertedProps = {
-		backgroundColor: backgroundColor ? colorParser.convert(backgroundColor) : null
-	};
+	const backgroundColor = props.backgroundColor ? convertColor(props.backgroundColor) : null;
 
 	return (
 		<Fragment>
@@ -113,7 +110,7 @@ const Eml = props => {
 					</style>
 					{ msoClose }
 				</head>
-				<body bgcolor={backgroundColor ? convertedProps.backgroundColor : null}>
+				<body bgcolor={backgroundColor}>
 					{ previewText && preview(previewText) }
 
 					{ notMsoOpen }
@@ -132,9 +129,9 @@ const Eml = props => {
 	);
 };
 
-Eml.defaultProps = {
-
-};
+// Eml.defaultProps = {
+//
+// };
 
 Eml.propTypes = {
 	previewText: string,
