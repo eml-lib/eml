@@ -4,7 +4,7 @@ import url from '../prop-types/url';
 import * as lengthParser from '../parsers/length';
 import * as colorParser from '../parsers/color';
 import * as dimensionBoxParser from '../parsers/dimension-box';
-import { tableAsBlock as ieTableProps } from './helpers/ie-props';
+import { tableAsBlock as msoTableProps } from './helpers/mso-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 const { bool } = propTypes;
 
@@ -62,7 +62,7 @@ const Link = props => {
 			<Fragment>
 				{ msoOpen }
 				<table
-					{...ieTableProps}
+					{...msoTableProps}
 					bgcolor={parsedProps.backgroundColor ? colorParser.stringify(parsedProps.backgroundColor) : null}
 					width={parsedProps.width ? lengthParser.stringifyHtmlAttr(parsedProps.width) : null}
 					style={{ border: border || null }}

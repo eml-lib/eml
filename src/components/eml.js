@@ -2,12 +2,27 @@ import { createElement, Fragment, renderHtml } from 'eml-core';
 import propTypes from 'prop-types';
 import color from '../prop-types/color';
 import repeat from '../helpers/string-repeat';
-import * as lengthParser from '../parsers/length';
 import * as colorParser from '../parsers/color';
-import { tableAsBlock as ieTableProps } from './helpers/ie-props';
 import { msoOpen, msoLteVersion, msoGteVersion, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 
 const { string } = propTypes;
+
+const commonStyles = [
+	'body { margin: 0 }',
+
+	// Force Outlook Desktop to render line heights as they're originally set
+	'p, a, li, td, blockquote { mso-line-height-rule: exactly }',
+
+	// Force Gmail mobile app set full width to body
+	// https://litmus.com/community/discussions/6950-full-width-on-gmail-app-for-ios
+	'@media screen and (max-width: 599px) { u ~ div .wrapper { min-width: 100vw } }',
+
+	// Force Outlook.com to display emails at full width
+	'.ReadMsgBody, .ExternalClass { width: 100% }',
+
+	// Force Outlook.com to display line heights normally
+	'.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass td, .ExternalClass div { line-height: 100% }'
+].join('\n');
 
 // Insert &zwnj;&nbsp; hack after hidden preview text
 const preview = text => (
@@ -40,18 +55,11 @@ const Eml = props => {
 		fontFamily,
 		backgroundColor,
 
-		// ???
-		maxWidth,
-		align,
-		foregroundColor,
-
 		children
 	} = props;
 
-	const parsedProps = {
-		maxWidth: maxWidth ? lengthParser.parse(maxWidth, ['px', '%']) : null,
-		backgroundColor: backgroundColor ? colorParser.parse(backgroundColor) : null,
-		foregroundColor: foregroundColor ? colorParser.parse(foregroundColor) : null
+	const convertedProps = {
+		backgroundColor: backgroundColor ? colorParser.convert(backgroundColor) : null
 	};
 
 	return (
@@ -63,12 +71,20 @@ const Eml = props => {
 					<meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
 					<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
 
-					{ notMsoOpen }
-					{ fontFamily && <link href={`https://fonts.googleapis.com/css?family=${fontFamily}:400,700`} rel="stylesheet" type="text/css" /> }
 					<style type="text/css">
-						{ `body { font-family: "${fontFamily}", sans-serif }` }
+						{ commonStyles }
 					</style>
-					{ notMsoClose }
+
+					{ fontFamily && (
+						<Fragment>
+							{ notMsoOpen }
+							<link href={`https://fonts.googleapis.com/css?family=${fontFamily}:400,700`} rel="stylesheet" type="text/css" />
+							<style type="text/css">
+								{ `body { font-family: "${fontFamily}", sans-serif }` }
+							</style>
+							{ notMsoClose }
+						</Fragment>
+					) }
 
 					{ msoOpen }
 					<style type="text/css">
@@ -97,38 +113,15 @@ const Eml = props => {
 					</style>
 					{ msoClose }
 				</head>
-				<body bgcolor={backgroundColor ? colorParser.stringify(parsedProps.backgroundColor) : null}>
+				<body bgcolor={backgroundColor ? convertedProps.backgroundColor : null}>
 					{ previewText && preview(previewText) }
 
 					{ notMsoOpen }
-					<div style={{
-						maxWidth: parsedProps.maxWidth ? lengthParser.stringifyStyle(parsedProps.maxWidth) : null,
-						margin: align === 'center' ? '0 auto' : align === 'end' ? '0 0 0 auto' : null,
-						backgroundColor: parsedProps.foregroundColor ? colorParser.stringify(parsedProps.foregroundColor) : null
-					}} className="wrapper">
+					<div className="wrapper">
 						{ notMsoClose }
-						{ msoOpen }
-						<table {...ieTableProps} width="100%">
-							<tr>
-								<td align={align === 'center' ? 'center' : align === 'end' ? 'right' : null}>
-									<table
-										{...ieTableProps}
-										width={parsedProps.maxWidth ? lengthParser.stringifyHtmlAttr(parsedProps.maxWidth) : '100%'}
-										bgcolor={parsedProps.foregroundColor ? colorParser.stringify(parsedProps.foregroundColor) : null}
-									>
-										<tr>
-											<td align="left">
-												{ msoClose }
-												{ children }
-												{ msoOpen }
-											</td>
-										</tr>
-									</table>
 
-								</td>
-							</tr>
-						</table>
-						{ msoClose }
+						{ children }
+
 						{ notMsoOpen }
 					</div>
 					{ notMsoClose }
@@ -139,35 +132,8 @@ const Eml = props => {
 	);
 };
 
-Eml.css = {
-	'body': {
-		margin: 0
-	},
-	// Force Outlook Desktop to render line heights as they're originally set
-	'p, a, li, td, blockquote': {
-		msoLineHeightRule: 'exactly'
-	},
-	// Force Gmail mobile app set full width to body
-	// https://litmus.com/community/discussions/6950-full-width-on-gmail-app-for-ios
-	'@media screen and (max-width: 599px)': {
-		'u ~ div .wrapper': {
-			minWidth: '100vw'
-		}
-	},
-	// Force Outlook.com to display emails at full width
-	'.ReadMsgBody, .ExternalClass': {
-		width: '100%'
-	},
-	// Force Outlook.com to display line heights normally
-	'.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass td, .ExternalClass div': {
-		lineHeight: '100%'
-	}
-
-};
-
 Eml.defaultProps = {
-	// maxWidth: 600,
-	align: 'start'
+
 };
 
 Eml.propTypes = {

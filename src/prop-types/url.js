@@ -1,18 +1,8 @@
 import urlRegexp from 'url-regex';
+import createPropType from './helpers/create-prop-type';
 
-const createUrlPropType = isRequired => (props, propName, componentName) => {
-	const value = props[propName];
-
-	if ((value === null || value === undefined) && isRequired) {
-		return new TypeError(`\`${componentName}\`: prop \`${propName}\` is required.`);
-	}
-
+export default createPropType(value => {
 	if (!urlRegexp({ exact: true }).test(value)) {
-		return new TypeError(`Invalid value \`${value}\` of prop \`${propName}\` supplied to \`${componentName}\`, expected correct URL`)
+		return new TypeError('expected correct URL');
 	}
-};
-
-const urlPropType = createUrlPropType(false);
-urlPropType.isRequired = createUrlPropType(true);
-
-export default urlPropType;
+});

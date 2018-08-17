@@ -1,13 +1,12 @@
 import { createElement, Fragment } from 'eml-core';
-import propTypes from 'prop-types';
-import color from '../prop-types/color';
+import { text, decoration, block } from '../prop-types';
 import * as lengthParser from '../parsers/length';
 import * as colorParser from '../parsers/color';
+import convertText from '../parsers/text';
+import convertBorder from '../parsers/border';
 import * as dimensionBoxParser from '../parsers/dimension-box';
-import { tableAsBlock as ieTableProps } from './helpers/ie-props';
+import { tableAsBlock as msoTableProps } from './helpers/mso-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
-
-const { number, oneOf } = propTypes;
 
 const renderYPadding = (padding, colSpan) => (
 	padding > 0 ? (
@@ -25,32 +24,44 @@ const renderXPadding = (padding) => (
 
 const Block = props => {
     const {
+		background,
+		// backgroundColor,
+		backgroundImage,
+		backgroundPosition,
+		backgroundRepeat,
+
 		width,
+		minWidth,
+		maxWidth,
 		height,
+		minHeight,
+		maxHeight,
+
+		margin,
+		marginTop,
+		marginRight,
+		marginBottom,
+		marginLeft,
+
 		padding,
-		border,
-        borderRadius,
-
-		backgroundColor,
-
-        color,
-		fontSize,
-		fontFamily,
-		fontWeight,
-		lineHeight,
-		letterSpacing,
-		textDecoration,
-		textTransform,
+		paddingTop,
+		paddingRight,
+		paddingBottom,
+		paddingLeft,
 
         children
     } = props;
 
+    const textStyles = convertText(props);
+    const borderStyles = convertBorder(props);
+
+    const color = props.color ? colorParser.convert(props.color) : null;
+    const backgroundColor = props.backgroundColor ? colorParser.convert(props.backgroundColor) : null;
+
     const parsedProps = {
-		width: width ? lengthParser.parse(width, 'px') : null,
+		width: width ? lengthParser.parse(width, ['px', '%']) : null,
 		height: height ? lengthParser.parse(height, 'px') : null,
-		padding: dimensionBoxParser.parse(padding),
-		backgroundColor: backgroundColor ? colorParser.parse(backgroundColor) : null,
-		color: color ? colorParser.parse(color) : null,
+		padding: dimensionBoxParser.parse(padding)
 	};
 
     const contentColSize = 1;
@@ -60,10 +71,13 @@ const Block = props => {
     	<Fragment>
 			{ msoOpen }
 			<table
-				{...ieTableProps}
-				bgcolor={ parsedProps.backgroundColor ? colorParser.stringify(parsedProps.backgroundColor) : null }
-				width={ parsedProps.width ? lengthParser.stringifyHtmlAttr(parsedProps.width) : null }
-				style={{ border }}
+				{...msoTableProps}
+				bgcolor={ backgroundColor }
+				width={ parsedProps.width ? lengthParser.stringifyHtmlAttr(parsedProps.width) : '100%' }
+				style={{
+					...textStyles,
+					...borderStyles
+				}}
 			>
 				{ renderYPadding(parsedProps.padding.top, colSpan) }
 				<tr>
@@ -71,19 +85,20 @@ const Block = props => {
 					<td
 						height={ parsedProps.height ? parsedProps.height.value - (parsedProps.padding.top + parsedProps.padding.bottom) : null }
 						valign="top"
-						style={{ color: parsedProps.color ? colorParser.stringify(parsedProps.color) : null }}
+						style={{ color }}
 					>
 						{ msoClose }
 						{ notMsoOpen }
-						<div
-							className="block"
-							style={{
-								width: parsedProps.width ? lengthParser.stringifyStyle(parsedProps.width) : null,
-								height: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
-								padding: dimensionBoxParser.stringify(parsedProps.padding),
-								backgroundColor: parsedProps.backgroundColor ? colorParser.stringify(parsedProps.backgroundColor) : null
-							}}
-						>
+						<div style={{
+							boxSizing: 'border-box',
+							width: parsedProps.width ? lengthParser.stringifyStyle(parsedProps.width) : null,
+							height: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
+							padding: dimensionBoxParser.stringify(parsedProps.padding),
+							backgroundColor,
+							color,
+							...textStyles,
+							...borderStyles
+						}}>
 							{ notMsoClose }
 							{ children }
 							{ notMsoOpen }
@@ -105,16 +120,9 @@ Block.defaultProps = {
 };
 
 Block.propTypes = {
-	fontSize: number,
-	fontWeight: oneOf(['normal', 'bold']),
-	backgroundColor: color,
-	color: color
-};
-
-Block.css = {
-	'.block': {
-		boxSizing: 'border-box'
-	}
+	...text,
+	...decoration,
+	...block
 };
 
 export default Block;

@@ -2,7 +2,7 @@ import { createElement, Fragment, Component } from 'eml-core';
 import arrayPartition from '../helpers/array-partition';
 import insertBetween from '../helpers/array-insert-between';
 import arrayFromCount from '../helpers/array-from-count';
-import { tableAsBlock as ieTableProps } from './helpers/ie-props';
+import { tableAsBlock as msoTableProps } from './helpers/mso-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 
 export default class AutoGrid extends Component {
@@ -47,7 +47,7 @@ export default class AutoGrid extends Component {
 		const childNodes = this.renderRows({ rows: partitions });
 
 		return (
-			<table {...ieTableProps} width="100%">
+			<table {...msoTableProps} width="100%">
 				<div>
 					{ childNodes }
 				</div>

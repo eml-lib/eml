@@ -1,12 +1,4 @@
 export function parse(value, unitTypes = []) {
-	const isParsedObject = (
-		typeof value === 'object'
-		&& 'value' in value
-		&& 'unit' in value
-	);
-	if (isParsedObject) {
-		return value;
-	}
 	if (!Array.isArray(unitTypes)) {
 		unitTypes = [unitTypes];
 	}
