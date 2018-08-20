@@ -2,16 +2,18 @@ import { convert as parseColor } from './color';
 
 export default props => {
 	const {
-		background,
+		// background,
 		backgroundColor,
 		backgroundImage,
 		backgroundPosition,
-		backgroundRepeat,
-		...restProps
+		backgroundRepeat
 	} = props;
 
 	return {
-		background,
-		...restProps
+		// background,
+		backgroundColor,
+		backgroundImage,
+		backgroundPosition,
+		backgroundRepeat
 	};
 };

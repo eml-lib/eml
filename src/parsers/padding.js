@@ -4,8 +4,7 @@ export default props => {
 		paddingTop,
 		paddingRight,
 		paddingBottom,
-		paddingLeft,
-		...restProps
+		paddingLeft
 	} = props;
 
 	return {
@@ -13,7 +12,6 @@ export default props => {
 		paddingTop,
 		paddingRight,
 		paddingBottom,
-		paddingLeft,
-		...restProps
+		paddingLeft
 	};
 };

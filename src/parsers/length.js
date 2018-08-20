@@ -35,6 +35,4 @@ export const stringifyHtmlAttr = dimension => (
 		: null
 );
 
-export const validate = (value, unitTypes = []) => {
-	
-};
+export const validate = (value, unitTypes) => parse(value, unitTypes);

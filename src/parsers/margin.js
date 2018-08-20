@@ -4,8 +4,7 @@ export default props => {
 		marginTop,
 		marginRight,
 		marginBottom,
-		marginLeft,
-		...restProps
+		marginLeft
 	} = props;
 
 	return {
@@ -13,7 +12,6 @@ export default props => {
 		marginTop,
 		marginRight,
 		marginBottom,
-		marginLeft,
-		...restProps
+		marginLeft
 	};
 };

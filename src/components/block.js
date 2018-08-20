@@ -1,13 +1,13 @@
 import { createElement, Fragment } from 'eml-core';
 import { text, decoration, block } from '../prop-types';
 import * as lengthParser from '../parsers/length';
+import * as dimensionBoxParser from '../parsers/dimension-box';
 import { convert as convertColor } from '../parsers/color';
 import compose from '../parsers/compose';
 import convertText from '../parsers/text';
 import convertBorder from '../parsers/border';
-import convertBackground from '../parsers/border';
+import convertBackground from '../parsers/background';
 import convertMargin from '../parsers/margin';
-import * as dimensionBoxParser from '../parsers/dimension-box';
 import { tableAsBlock as msoTableProps } from './helpers/mso-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 
@@ -27,7 +27,6 @@ const renderXPadding = (padding) => (
 
 const Block = props => {
     const {
-		background,
 		// backgroundColor,
 		backgroundImage,
 		backgroundPosition,
@@ -57,8 +56,8 @@ const Block = props => {
 
     const parsedProps = {
 		width: width ? lengthParser.parse(width, ['px', '%']) : null,
-		height: height ? lengthParser.parse(height, 'px') : null,
-		padding: dimensionBoxParser.parse(padding)
+		height: height ? lengthParser.parse(height, ['px', '%']) : null,
+		padding: dimensionBoxParser.parse(padding, value => lengthParser.parse(value, ['px']))
 	};
 
     const contentColSize = 1;
@@ -89,7 +88,7 @@ const Block = props => {
 							boxSizing: 'border-box',
 							width: parsedProps.width ? lengthParser.stringifyStyle(parsedProps.width) : null,
 							height: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
-							padding: dimensionBoxParser.stringify(parsedProps.padding),
+							padding: dimensionBoxParser.stringify(parsedProps.padding, lengthParser.stringifyStyle),
 							...convertBackground(props),
 							color,
 							...commonStyles

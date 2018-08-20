@@ -1,47 +1,29 @@
-export function parse(values) {
-	const isObjectFormat = (
-		typeof values === 'object'
-		&& ['top', 'right', 'bottom', 'left'].some(dimension => dimension in values)
-	);
-	const isArrayFormat = Array.isArray(values);
-	const isStringFormat = typeof values === 'string';
-	const isNumberFormat = typeof values === 'number';
-
-	if (isObjectFormat) {
-		return values;
+export const parse = (values, valueParseFn) => {
+	if (!Array.isArray(values)) {
+		values = [values];
 	}
 
-	if (isArrayFormat || isStringFormat || isNumberFormat) {
-		if (isNumberFormat) {
-			values = [values];
-		}
+	if (values.length) {
+		const [top = 0, right = top, bottom = top, left = right] = values;
 
-		if (isStringFormat) {
-			values = values !== '' ? values.split(' ').map(Number) : null;
-		}
-
-		if (!values.length) {
-			throw new Error(`Invalid format "${values}"`);
-		}
-
-		const [
-			top = 0,
-			right = top,
-			bottom = top,
-			left = right
-		] = values;
-
-		return { top, right, bottom, left };
+		return {
+			top: valueParseFn(top),
+			right: valueParseFn(right),
+			bottom: valueParseFn(bottom),
+			left: valueParseFn(left)
+		};
 	}
 
 	throw new Error(`Invalid format "${values}"`);
-}
+};
 
-export function stringify(dimensions) {
+export const stringify = (dimensions, valueStringifyFn) => {
 	if (dimensions) {
 		const { top, right, bottom, left } = dimensions;
-		return [top, right, bottom, left].map(value => value !== 0 ? value + 'px' : value).join(' ');
+		return [top, right, bottom, left].map(valueStringifyFn).join(' ');
 	} else {
 		return null;
 	}
-}
+};
+
+export const validate = (values, valueParseFn) => parse(values, valueParseFn);
