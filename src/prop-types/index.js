@@ -61,13 +61,13 @@ export const block = {
 	minHeight: length(['px', '%']),
 	maxHeight: length(['px', '%']),
 
-	padding: dimensionBox(value => length(value, ['px', '%'])),
+	padding: dimensionBox(length(['px', '%'])),
 	paddingTop: number,
 	paddingRight: number,
 	paddingBottom: number,
 	paddingLeft: number,
 
-	margin: dimensionBox(value => length(value, ['px', '%'])),
+	margin: dimensionBox(length(['px', '%'])),
 	marginTop: number,
 	marginRight: number,
 	marginBottom: number,

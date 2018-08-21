@@ -3,8 +3,10 @@ import createPropType from './helpers/create-prop-type';
 
 export default valueParseFn => createPropType(value => {
 	try {
-		validate(value, valueParseFn);
+		console.log(222);
+		return validate(value, valueParseFn);
 	} catch (e) {
+		console.log(22, e);
 		return e;
 	}
 });

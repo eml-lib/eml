@@ -1,7 +1,8 @@
 import { createElement, Fragment } from 'eml-core';
 import { text, decoration, block } from '../prop-types';
 import * as lengthParser from '../parsers/length';
-import * as dimensionBoxParser from '../parsers/dimension-box';
+// import * as dimensionBoxParser from '../parsers/dimension-box';
+import * as paddingParser from '../parsers/padding';
 import { convert as convertColor } from '../parsers/color';
 import compose from '../parsers/compose';
 import convertText from '../parsers/text';
@@ -26,7 +27,10 @@ const renderXPadding = (padding) => (
 );
 
 const Block = props => {
-    const {
+
+	console.log(5);
+
+	const {
 		// backgroundColor,
 		backgroundImage,
 		backgroundPosition,
@@ -39,28 +43,22 @@ const Block = props => {
 		minHeight,
 		maxHeight,
 
-		padding,
-		paddingTop,
-		paddingRight,
-		paddingBottom,
-		paddingLeft,
-
         children
     } = props;
 
-	const commonStyles = {
-		...compose(props, [convertText, convertBorder, convertMargin])
-	};
+	const commonStyles = compose(props, [convertText, convertBorder, convertMargin]);
 
-    const color = props.color ? convertColor(props.color) : null;
+	// console.log('commonStyles', props);
+
+	const color = props.color ? convertColor(props.color) : null;
 
     const parsedProps = {
 		width: width ? lengthParser.parse(width, ['px', '%']) : null,
 		height: height ? lengthParser.parse(height, ['px', '%']) : null,
-		padding: dimensionBoxParser.parse(padding, value => lengthParser.parse(value, ['px']))
+		padding: paddingParser.parse(props)
 	};
 
-    const contentColSize = 1;
+	const contentColSize = 1;
     const colSpan = contentColSize + [parsedProps.padding.left, parsedProps.padding.right].filter(Boolean).length;
 
 	return (
@@ -88,10 +86,10 @@ const Block = props => {
 							boxSizing: 'border-box',
 							width: parsedProps.width ? lengthParser.stringifyStyle(parsedProps.width) : null,
 							height: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
-							padding: dimensionBoxParser.stringify(parsedProps.padding, lengthParser.stringifyStyle),
+							padding: paddingParser.stringify(parsedProps.padding),
+							...commonStyles,
 							...convertBackground(props),
-							color,
-							...commonStyles
+							color
 						}}>
 							{ notMsoClose }
 							{ children }

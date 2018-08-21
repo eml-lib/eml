@@ -1,5 +1,6 @@
 import { createElement, isElement, Component, Fragment } from 'eml-core';
 import propTypes from 'prop-types';
+import { text, decoration, block } from '../prop-types';
 import color from '../prop-types/color';
 import * as dimensionBoxParser from '../parsers/dimension-box';
 import { tableAsBlock as msoTableProps } from './helpers/mso-props';
@@ -36,6 +37,10 @@ export default class Flex extends Component {
 		justifyContent: oneOf(['start', 'center', 'end', 'stretch']),
 		alignItems: oneOf(['start', 'center', 'end', 'stretch']),
 		gap: number,
+
+		...text,
+		...decoration,
+		...block,
 
 		color: color,
 		backgroundColor: color
