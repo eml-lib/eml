@@ -65,8 +65,8 @@ const Eml = props => {
 			{ '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">' }
 				<head>
 					<meta charSet="utf-8" />
-					<meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-					<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
+					<meta httpEquiv="Content-Type" content="text/html, charset=utf-8" />
+					<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
 					<style type="text/css">
 						{ commonStyles }
@@ -128,10 +128,6 @@ const Eml = props => {
 		</Fragment>
 	);
 };
-
-// Eml.defaultProps = {
-//
-// };
 
 Eml.propTypes = {
 	previewText: string,
