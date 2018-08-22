@@ -1,4 +1,5 @@
 import { createElement } from 'eml-core';
+import { element } from '../prop-types';
 
 const Text = props => {
 	const {
@@ -11,7 +12,7 @@ const Text = props => {
 };
 
 Text.propTypes = {
-
+	...element
 };
 
 export default Text;

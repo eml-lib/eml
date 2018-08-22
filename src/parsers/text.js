@@ -1,3 +1,5 @@
+import { convert as convertColor } from '../parsers/color';
+
 export default props => {
 	const {
 		font,
@@ -8,7 +10,9 @@ export default props => {
 
 		letterSpacing,
 		textDecoration,
-		textTransform
+		textTransform,
+
+		color
 	} = props;
 
 	return {
@@ -20,6 +24,8 @@ export default props => {
 
 		letterSpacing,
 		textDecoration,
-		textTransform
+		textTransform,
+
+		color: color ? convertColor(color) : null
 	};
 };

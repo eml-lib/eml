@@ -1,8 +1,10 @@
 import { createElement, Fragment, renderHtmlAttributes } from 'eml-core';
 import propTypes from 'prop-types';
+import { element } from '../prop-types';
 import url from '../prop-types/url';
 import * as lengthParser from '../parsers/length';
-import * as colorParser from '../parsers/color';
+import { convert as convertColor } from '../parsers/color';
+import * as paddingParser from '../parsers/padding';
 import * as dimensionBoxParser from '../parsers/dimension-box';
 import { tableAsBlock as msoTableProps } from './helpers/mso-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
@@ -27,22 +29,23 @@ const Link = props => {
 		to,
 		noUnderline,
 
-		padding,
+		// padding,
 		width,
 		height,
-		backgroundColor,
+		// backgroundColor,
 		border,
 		borderRadius,
-		color,
+		// color,
 		children
 	} = props;
 
+	const backgroundColor = props.backgroundColor ? convertColor(props.backgroundColor) : null;
+	const color = props.color ? convertColor(props.color) : null;
+
 	const parsedProps = {
-		width: width ? lengthParser.parse(width, 'px') : null,
-		height: height ? lengthParser.parse(height, 'px') : null,
-		backgroundColor: backgroundColor ? colorParser.parse(backgroundColor) : null,
-		color: color ? colorParser.parse(color) : null,
-		padding: dimensionBoxParser.parse(padding)
+		width: width ? lengthParser.parse(width, ['px', '%']) : null,
+		height: height ? lengthParser.parse(height, ['px', '%']) : null,
+		padding: paddingParser.parse(props)
 	};
 
 	const isBlock = (
@@ -52,8 +55,8 @@ const Link = props => {
 	);
 
 	const commonStyles = {
-		backgroundColor: parsedProps.backgroundColor ? colorParser.stringify(parsedProps.backgroundColor) : null,
-		color: parsedProps.color ? colorParser.stringify(parsedProps.color) : null,
+		backgroundColor,
+		color,
 		textDecoration: noUnderline ? 'none' : 'underline'
 	};
 
@@ -63,7 +66,7 @@ const Link = props => {
 				{ msoOpen }
 				<table
 					{...msoTableProps}
-					bgcolor={parsedProps.backgroundColor ? colorParser.stringify(parsedProps.backgroundColor) : null}
+					bgcolor={backgroundColor}
 					width={parsedProps.width ? lengthParser.stringifyHtmlAttr(parsedProps.width) : null}
 					style={{ border: border || null }}
 				>
@@ -74,11 +77,11 @@ const Link = props => {
 					>
 						<a href={to} style={{
 							...commonStyles,
-							msoPaddingAlt: parsedProps.padding ? dimensionBoxParser.stringify(parsedProps.padding) : null,
+							msoPaddingAlt: parsedProps.padding ? paddingParser.stringify(parsedProps.padding) : null,
 							// Без `borderTop` и `borderBottom` не будет работать `msoPaddingAlt`
-							...(parsedProps.backgroundColor && {
-								borderTop: `1px solid ${colorParser.stringify(parsedProps.backgroundColor)}`,
-								borderBottom: `1px solid ${colorParser.stringify(parsedProps.backgroundColor)}`
+							...(backgroundColor && {
+								borderTop: `1px solid ${backgroundColor}`,
+								borderBottom: `1px solid ${backgroundColor}`
 							})
 						}}>
 							{ msoClose }
@@ -87,7 +90,7 @@ const Link = props => {
 								...commonStyles,
 								display: 'inline-block',
 								boxSizing: 'border-box',
-								padding: dimensionBoxParser.stringify(parsedProps.padding),
+								padding: paddingParser.stringify(parsedProps.padding),
 								width: parsedProps.width ? lengthParser.stringifyStyle(parsedProps.width) : null,
 								height: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
 								lineHeight: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
@@ -115,7 +118,7 @@ const Link = props => {
 				style={{
 					...commonStyles,
 					...(isBlock ? { display: 'inline-block' } : null),
-					padding: dimensionBoxParser.stringify(parsedProps.padding)
+					padding: paddingParser.stringify(parsedProps.padding)
 				}}
 			>
 				{ children }
@@ -169,6 +172,7 @@ Link.defaultProps = {
 };
 
 Link.propTypes = {
+	...element,
 	to: url.isRequired,
 	noUnderline: bool
 };

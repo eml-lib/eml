@@ -8,7 +8,8 @@ const { bool, number, string, oneOf } = propTypes;
 
 const borderStyle = oneOf(['dotted', 'dashed', 'solid']);
 
-export const text = {
+export const element = {
+	// Text
 	color: color,
 	fontSize: length(['px']),
 	fontFamily: string,
@@ -17,14 +18,14 @@ export const text = {
 	letterSpacing: length(['px']),
 	textDecoration: bool,
 	textTransform: oneOf(['capitalize', 'uppercase', 'lowercase']),
-};
 
-export const decoration = {
+	// Background
 	backgroundColor: color,
 	backgroundImage: url,
 	backgroundPosition: string,
 	backgroundRepeat: oneOf(['x', 'y']),
 
+	// Border
 	border: string,
 	borderColor: color,
 	borderWidth: string,
@@ -45,33 +46,28 @@ export const decoration = {
 	borderTopStyle: borderStyle,
 	borderTopWidth: number,
 
+	// Border-radius
 	borderRadius: string,
 	borderTopLeftRadius: number,
 	borderTopRightRadius: number,
 	borderBottomLeftRadius: number,
-	borderBottomRightRadius: number
-};
+	borderBottomRightRadius: number,
 
-export const block = {
+	// Block
 	width: length(['px', '%']),
 	minWidth: length(['px', '%']),
 	maxWidth: length(['px', '%']),
-
 	height: length(['px', '%']),
 	minHeight: length(['px', '%']),
 	maxHeight: length(['px', '%']),
-
 	padding: dimensionBox(length(['px', '%'])),
 	paddingTop: number,
 	paddingRight: number,
 	paddingBottom: number,
 	paddingLeft: number,
-
 	margin: dimensionBox(length(['px', '%'])),
 	marginTop: number,
 	marginRight: number,
 	marginBottom: number,
 	marginLeft: number,
-
-	// align: oneOf(['start', 'center', 'end'])
 };

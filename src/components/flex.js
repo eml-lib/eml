@@ -1,8 +1,8 @@
 import { createElement, isElement, Component, Fragment } from 'eml-core';
 import propTypes from 'prop-types';
-import { text, decoration, block } from '../prop-types';
-import color from '../prop-types/color';
+import { element } from '../prop-types';
 import * as dimensionBoxParser from '../parsers/dimension-box';
+import convertBlock from '../parsers/block';
 import { tableAsBlock as msoTableProps } from './helpers/mso-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 import Block from './block';
@@ -10,17 +10,17 @@ import Block from './block';
 const { number, oneOf } = propTypes;
 
 const alignToHorizontal = {
-	'start': 'left',
-	'center': 'center',
-	'end': 'right',
-	'stretch': 'left'
+	'start': 	'left',
+	'center': 	'center',
+	'end': 		'right',
+	'stretch': 	'left'
 };
 
 const alignToVertical = {
-	'start': 'top',
-	'center': 'middle',
-	'end': 'bottom',
-	'stretch': 'top'
+	'start': 	'top',
+	'center': 	'middle',
+	'end': 		'bottom',
+	'stretch': 	'top'
 };
 
 export default class Flex extends Component {
@@ -29,29 +29,18 @@ export default class Flex extends Component {
 		justifyContent: 'start',
 		alignItems: 'stretch',
 		gap: 0,
-		padding: 0
 	};
 
 	static propTypes = {
+		...element,
 		direction: oneOf(['row', 'column']),
 		justifyContent: oneOf(['start', 'center', 'end', 'stretch']),
 		alignItems: oneOf(['start', 'center', 'end', 'stretch']),
 		gap: number,
-
-		...text,
-		...decoration,
-		...block,
-
-		color: color,
-		backgroundColor: color
 	};
 
 	constructor(props) {
 		super(props);
-
-		this.parsedProps = {
-			padding: dimensionBoxParser.parse(props.padding)
-		};
 
 		this.childrenFlexes = props.children.reduce((acc, child) => (
 			isElement(child) && child.props.flex
@@ -61,12 +50,10 @@ export default class Flex extends Component {
 	}
 
 	render() {
-		const { direction, justifyContent, padding } = this.props;
+		const { direction, justifyContent } = this.props;
 
 		return (
-			<Block
-				padding={padding}
-			>
+			<Block {...convertBlock(this.props)}>
 				{ msoOpen }
 				<table width="100%">
 					<tr>

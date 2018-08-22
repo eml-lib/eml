@@ -1,5 +1,5 @@
 import { createElement, Fragment } from 'eml-core';
-import { text, decoration, block } from '../prop-types';
+import { element } from '../prop-types';
 import * as lengthParser from '../parsers/length';
 // import * as dimensionBoxParser from '../parsers/dimension-box';
 import * as paddingParser from '../parsers/padding';
@@ -27,9 +27,6 @@ const renderXPadding = (padding) => (
 );
 
 const Block = props => {
-
-	console.log(5);
-
 	const {
 		// backgroundColor,
 		backgroundImage,
@@ -48,11 +45,7 @@ const Block = props => {
 
 	const commonStyles = compose(props, [convertText, convertBorder, convertMargin]);
 
-	// console.log('commonStyles', props);
-
-	const color = props.color ? convertColor(props.color) : null;
-
-    const parsedProps = {
+	const parsedProps = {
 		width: width ? lengthParser.parse(width, ['px', '%']) : null,
 		height: height ? lengthParser.parse(height, ['px', '%']) : null,
 		padding: paddingParser.parse(props)
@@ -78,7 +71,6 @@ const Block = props => {
 					<td
 						height={ parsedProps.height ? parsedProps.height.value - (parsedProps.padding.top + parsedProps.padding.bottom) : null }
 						valign="top"
-						style={{ color }}
 					>
 						{ msoClose }
 						{ notMsoOpen }
@@ -88,8 +80,7 @@ const Block = props => {
 							height: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
 							padding: paddingParser.stringify(parsedProps.padding),
 							...commonStyles,
-							...convertBackground(props),
-							color
+							...convertBackground(props)
 						}}>
 							{ notMsoClose }
 							{ children }
@@ -112,9 +103,7 @@ Block.defaultProps = {
 };
 
 Block.propTypes = {
-	...text,
-	...decoration,
-	...block
+	...element
 };
 
 export default Block;
