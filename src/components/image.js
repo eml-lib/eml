@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 import elementTypes from '../props/element-types';
 import * as lengthParser from '../props/parsers/length';
 
-const { number, string } = propTypes;
+const { string } = propTypes;
 
 const Image = props => {
 	const {
