@@ -1,41 +1,38 @@
 import { createElement, Fragment, renderHtmlAttributes } from 'eml-core';
 import propTypes from 'prop-types';
-import { element } from '../prop-types';
-import url from '../prop-types/url';
-import * as lengthParser from '../parsers/length';
-import { convert as convertColor } from '../parsers/color';
-import * as paddingParser from '../parsers/padding';
-import * as dimensionBoxParser from '../parsers/dimension-box';
-import { tableAsBlock as msoTableProps } from './helpers/mso-props';
+import elementTypes from '../props/element-types';
+import url from '../props/types/url';
+import * as lengthParser from '../props/parsers/length';
+import * as paddingParser from '../props/padding';
+import textPropsToStyles from '../props/props-to-styles/text';
+import { convert as convertColor } from '../props/parsers/color';
+import msoTableProps from './helpers/mso-table-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 const { bool } = propTypes;
 
-const renderYPadding = (padding, colSpan) => (
-	padding > 0 ? (
-		<tr>
-			<td colSpan={colSpan} height={padding} style={{ fontSize: 0 }}>&nbsp;</td>
-		</tr>
-	) : null
-);
-
-const renderXPadding = (padding) => (
-	padding > 0 ? (
-		<td width={padding} style={{ fontSize: 0 }}>&nbsp;</td>
-	) : null
-);
+// const renderYPadding = (padding, colSpan) => (
+// 	padding > 0 ? (
+// 		<tr>
+// 			<td colSpan={colSpan} height={padding} style={{ fontSize: 0 }}>&nbsp;</td>
+// 		</tr>
+// 	) : null
+// );
+//
+// const renderXPadding = (padding) => (
+// 	padding > 0 ? (
+// 		<td width={padding} style={{ fontSize: 0 }}>&nbsp;</td>
+// 	) : null
+// );
 
 const Link = props => {
 	const {
 		to,
-		noUnderline,
-
 		// padding,
 		width,
 		height,
-		// backgroundColor,
+		// textDecoration,
 		border,
 		borderRadius,
-		// color,
 		children
 	} = props;
 
@@ -45,20 +42,26 @@ const Link = props => {
 	const parsedProps = {
 		width: width ? lengthParser.parse(width, ['px', '%']) : null,
 		height: height ? lengthParser.parse(height, ['px', '%']) : null,
+		borderRadius: borderRadius ? lengthParser.parse(borderRadius, ['px']) : null,
 		padding: paddingParser.parse(props)
 	};
 
 	const isBlock = (
-		[parsedProps.padding.top, parsedProps.padding.right, parsedProps.padding.bottom, parsedProps.padding.left].some(length => length.value !== 0)
+		// [parsedProps.padding.top, parsedProps.padding.right, parsedProps.padding.bottom, parsedProps.padding.left].some(length => length.value > 0)
+		[parsedProps.padding.top, parsedProps.padding.right, parsedProps.padding.bottom, parsedProps.padding.left].some(length => length > 0)
 		|| parsedProps.width
 		|| parsedProps.height
 	);
 
 	const commonStyles = {
+		...textPropsToStyles(props),
+		boxSizing: 'border-box',
+		display: 'inline-block',
 		backgroundColor,
-		color,
-		textDecoration: noUnderline ? 'none' : 'underline'
+		color
 	};
+
+	console.log('commonStyles', commonStyles.textDecoration);
 
 	if (isBlock) {
 		return (
@@ -77,6 +80,7 @@ const Link = props => {
 					>
 						<a href={to} style={{
 							...commonStyles,
+							padding: paddingParser.stringify(parsedProps.padding),
 							msoPaddingAlt: parsedProps.padding ? paddingParser.stringify(parsedProps.padding) : null,
 							// Без `borderTop` и `borderBottom` не будет работать `msoPaddingAlt`
 							...(backgroundColor && {
@@ -88,15 +92,13 @@ const Link = props => {
 							{ notMsoOpen }
 							<a href={to} style={{
 								...commonStyles,
-								display: 'inline-block',
-								boxSizing: 'border-box',
 								padding: paddingParser.stringify(parsedProps.padding),
 								width: parsedProps.width ? lengthParser.stringifyStyle(parsedProps.width) : null,
 								height: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
 								lineHeight: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
 								textAlign: 'center',
 								border: border || null,
-								borderRadius: borderRadius || null
+								borderRadius: borderRadius ? lengthParser.stringifyStyle(parsedProps.borderRadius) : null
 							}}>
 								{ notMsoClose }
 								{ children }
@@ -172,9 +174,8 @@ Link.defaultProps = {
 };
 
 Link.propTypes = {
-	...element,
-	to: url.isRequired,
-	noUnderline: bool
+	...elementTypes,
+	to: url.isRequired
 };
 
 export default Link;

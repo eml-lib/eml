@@ -1,15 +1,13 @@
 import { createElement, Fragment } from 'eml-core';
-import { element } from '../prop-types';
-import * as lengthParser from '../parsers/length';
-// import * as dimensionBoxParser from '../parsers/dimension-box';
-import * as paddingParser from '../parsers/padding';
-import { convert as convertColor } from '../parsers/color';
-import compose from '../parsers/compose';
-import convertText from '../parsers/text';
-import convertBorder from '../parsers/border';
-import convertBackground from '../parsers/background';
-import convertMargin from '../parsers/margin';
-import { tableAsBlock as msoTableProps } from './helpers/mso-props';
+import elementTypes from '../props/element-types';
+import * as lengthParser from '../props/parsers/length';
+import * as paddingParser from '../props/padding';
+// import * as marginParser from '../props/margin';
+import backgroundPropsToStyles from '../props/props-to-styles/background';
+import textPropsToStyles from '../props/props-to-styles/text';
+import borderPropsToStyles from '../props/props-to-styles/border';
+import { convert as convertColor } from '../props/parsers/color';
+import msoTableProps from './helpers/mso-table-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 
 const renderYPadding = (padding, colSpan) => (
@@ -20,7 +18,7 @@ const renderYPadding = (padding, colSpan) => (
 	) : null
 );
 
-const renderXPadding = (padding) => (
+const renderXPadding = padding => (
 	padding > 0 ? (
 		<td width={padding} style={{ fontSize: 0 }}>&nbsp;</td>
 	) : null
@@ -28,11 +26,6 @@ const renderXPadding = (padding) => (
 
 const Block = props => {
 	const {
-		// backgroundColor,
-		backgroundImage,
-		backgroundPosition,
-		backgroundRepeat,
-
 		width,
 		minWidth,
 		maxWidth,
@@ -43,11 +36,19 @@ const Block = props => {
         children
     } = props;
 
-	const commonStyles = compose(props, [convertText, convertBorder, convertMargin]);
+	const commonStyles = {
+		...textPropsToStyles(props),
+		...borderPropsToStyles(props),
+		// ...marginParser.filterProps(props)
+	};
 
 	const parsedProps = {
 		width: width ? lengthParser.parse(width, ['px', '%']) : null,
+		minWidth: minWidth ? lengthParser.parse(minWidth, ['px', '%']) : null,
+		maxWidth: maxWidth ? lengthParser.parse(maxWidth, ['px', '%']) : null,
 		height: height ? lengthParser.parse(height, ['px', '%']) : null,
+		minHeight: minHeight ? lengthParser.parse(minHeight, ['px', '%']) : null,
+		maxHeight: maxHeight ? lengthParser.parse(maxHeight, ['px', '%']) : null,
 		padding: paddingParser.parse(props)
 	};
 
@@ -61,26 +62,28 @@ const Block = props => {
 				{...msoTableProps}
 				bgcolor={ props.backgroundColor ? convertColor(props.backgroundColor) : null }
 				width={ parsedProps.width ? lengthParser.stringifyHtmlAttr(parsedProps.width) : '100%' }
-				style={{
-					...commonStyles
-				}}
+				style={ commonStyles }
 			>
 				{ renderYPadding(parsedProps.padding.top, colSpan) }
 				<tr>
 					{ renderXPadding(parsedProps.padding.left) }
 					<td
-						height={ parsedProps.height ? parsedProps.height.value - (parsedProps.padding.top + parsedProps.padding.bottom) : null }
+						height={
+							parsedProps.height
+								? parsedProps.height.value - (parsedProps.padding.top + parsedProps.padding.bottom)
+								: null
+						}
 						valign="top"
 					>
 						{ msoClose }
 						{ notMsoOpen }
 						<div style={{
+							...commonStyles,
+							...backgroundPropsToStyles(props),
 							boxSizing: 'border-box',
 							width: parsedProps.width ? lengthParser.stringifyStyle(parsedProps.width) : null,
 							height: parsedProps.height ? lengthParser.stringifyStyle(parsedProps.height) : null,
-							padding: paddingParser.stringify(parsedProps.padding),
-							...commonStyles,
-							...convertBackground(props)
+							padding: paddingParser.stringify(parsedProps.padding)
 						}}>
 							{ notMsoClose }
 							{ children }
@@ -103,7 +106,7 @@ Block.defaultProps = {
 };
 
 Block.propTypes = {
-	...element
+	...elementTypes
 };
 
 export default Block;

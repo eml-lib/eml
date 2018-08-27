@@ -1,9 +1,7 @@
 import { createElement, isElement, Component, Fragment } from 'eml-core';
 import propTypes from 'prop-types';
-import { element } from '../prop-types';
-import * as dimensionBoxParser from '../parsers/dimension-box';
-import convertBlock from '../parsers/block';
-import { tableAsBlock as msoTableProps } from './helpers/mso-props';
+import elementTypes from '../props/element-types';
+import msoTableProps from './helpers/mso-table-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 import Block from './block';
 
@@ -32,7 +30,7 @@ export default class Flex extends Component {
 	};
 
 	static propTypes = {
-		...element,
+		...elementTypes,
 		direction: oneOf(['row', 'column']),
 		justifyContent: oneOf(['start', 'center', 'end', 'stretch']),
 		alignItems: oneOf(['start', 'center', 'end', 'stretch']),
@@ -53,18 +51,14 @@ export default class Flex extends Component {
 		const { direction, justifyContent } = this.props;
 
 		return (
-			<Block {...convertBlock(this.props)}>
+			<Block {...this.props}>
 				{ msoOpen }
 				<table width="100%">
 					<tr>
 						<td>
 							{ msoClose }
 							{ notMsoOpen }
-							<div style={{
-								...(direction === 'row' ? {
-									textAlign: alignToHorizontal[justifyContent]
-								} : null)
-							}}>
+							<div style={direction === 'row' ? { textAlign: alignToHorizontal[justifyContent] } : {}}>
 								{ notMsoClose }
 								{ this.renderBody() }
 								{ notMsoOpen }
@@ -103,8 +97,8 @@ export default class Flex extends Component {
 				{ direction === 'row' ? this.renderMsoRowGap() : this.renderMsoColumnGap() }
 				{ msoClose }
 				{ notMsoOpen }
-				<div style={{ ...(direction === 'row' ? { display: 'table-cell' } : null) }}>
-					<div style={{ ...(direction === 'row' ? { width: gap } : { height: gap }) }} />
+				<div style={direction === 'row' ? { display: 'table-cell' } : {}}>
+					<div style={direction === 'row' ? { width: gap } : { height: gap }} />
 				</div>
 				{ notMsoClose }
 			</Fragment>
@@ -150,14 +144,14 @@ export default class Flex extends Component {
 					<tr>
 						{ msoClose }
 						{ notMsoOpen }
-						<div style={{
-							...(direction === 'row' ? {
+						<div style={
+							direction === 'row' ? {
 								display: 'inline-table',
 								verticalAlign: 'top',
 								textAlign: 'left',
 								width
-							} : null)
-						}}>
+							} : {}
+						}>
 							{ notMsoClose }
 							{ body }
 							{ notMsoOpen }
@@ -199,26 +193,25 @@ export default class Flex extends Component {
 		const flexItem = (
 			<Fragment>
 				{ notMsoOpen }
-				<div style={{
-					...(direction === 'row'
+				<div style={
+					direction === 'row'
 						? {
 							display: 'table-cell',
 							width: rowChildWidth,
-							verticalAlign: alignToVertical[alignSelf],
+							verticalAlign: alignToVertical[alignSelf]
 						}
 						: {
 							textAlign: alignToHorizontal[alignSelf]
 						}
-					)
-				}}>
-					<div style={{
-						...(direction === 'column' ? {
+				}>
+					<div style={
+						direction === 'column' ? {
 							display: 'inline-block',
 							verticalAlign: alignToVertical[alignSelf],
 							width: alignSelf === 'stretch' ? '100%' : child.props.width,
 							textAlign: 'left'
-						} : null)
-					}}>
+						} : {}
+					}>
 						{ notMsoClose }
 						{ content }
 						{ notMsoOpen }

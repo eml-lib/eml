@@ -10,7 +10,9 @@ export default handler => {
 
 		if (value === null || value === undefined) {
 			if (isRequired) {
-				return new TypeError(`\`${componentName}\`: prop \`${propName}\` is required.`);
+				return new TypeError(
+					`\`${componentName}\`: prop \`${propName}\` is required.`
+				);
 			}
 
 			return;

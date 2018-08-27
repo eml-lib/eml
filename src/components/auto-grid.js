@@ -2,7 +2,7 @@ import { createElement, Fragment, Component } from 'eml-core';
 import arrayPartition from '../helpers/array-partition';
 import insertBetween from '../helpers/array-insert-between';
 import arrayFromCount from '../helpers/array-from-count';
-import { tableAsBlock as msoTableProps } from './helpers/mso-props';
+import msoTableProps from './helpers/mso-table-props';
 import { msoOpen, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 
 export default class AutoGrid extends Component {

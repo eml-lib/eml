@@ -23,7 +23,7 @@ export default props => {
 		lineHeight,
 
 		letterSpacing,
-		textDecoration,
+		textDecoration: textDecoration ? 'underline' : 'none',
 		textTransform,
 
 		color: color ? convertColor(color) : null

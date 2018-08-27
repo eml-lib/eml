@@ -1,9 +1,3 @@
-import { convert as convertColor } from './color';
-
-// CSS border styles
-// none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset | initial | inherit
-const styles = ['none', 'dotted', 'dashed', 'solid'];
-
 export default props => {
 	const {
 		border,
@@ -25,12 +19,6 @@ export default props => {
 		borderTopColor,
 		borderTopStyle,
 		borderTopWidth,
-
-		borderRadius,
-		borderTopLeftRadius,
-		borderTopRightRadius,
-		borderBottomLeftRadius,
-		borderBottomRightRadius,
 	} = props;
 
 	return {
@@ -53,11 +41,5 @@ export default props => {
 		borderTopColor,
 		borderTopStyle,
 		borderTopWidth,
-
-		borderRadius,
-		borderTopLeftRadius,
-		borderTopRightRadius,
-		borderBottomLeftRadius,
-		borderBottomRightRadius,
 	};
 };

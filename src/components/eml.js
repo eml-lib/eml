@@ -1,8 +1,8 @@
 import { createElement, Fragment, renderHtml } from 'eml-core';
 import propTypes from 'prop-types';
-import color from '../prop-types/color';
+import color from '../props/types/color';
 import repeat from '../helpers/string-repeat';
-import { convert as convertColor } from '../parsers/color';
+import { convert as convertColor } from '../props/parsers/color';
 import { msoOpen, msoLteVersion, msoGteVersion, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 
 const { string } = propTypes;

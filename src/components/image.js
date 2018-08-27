@@ -1,7 +1,7 @@
 import { createElement } from 'eml-core';
 import propTypes from 'prop-types';
-import { element } from '../prop-types';
-import * as lengthParser from '../parsers/length';
+import elementTypes from '../props/element-types';
+import * as lengthParser from '../props/parsers/length';
 
 const { number, string } = propTypes;
 
@@ -30,7 +30,7 @@ const Image = props => {
 };
 
 Image.propTypes = {
-	...element,
+	...elementTypes,
 	src: string,
 	alt: string,
 };
