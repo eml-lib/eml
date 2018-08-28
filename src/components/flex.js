@@ -52,40 +52,70 @@ export default class Flex extends Component {
 
 		return (
 			<Block {...this.props}>
-				{ msoOpen }
-				<table width="100%">
-					<tr>
-						<td>
-							{ msoClose }
-							{ notMsoOpen }
-							<div style={direction === 'row' ? { textAlign: alignToHorizontal[justifyContent] } : {}}>
-								{ notMsoClose }
-								{ this.renderBody() }
-								{ notMsoOpen }
-							</div>
-							{ notMsoClose }
-							{ msoOpen }
-						</td>
-					</tr>
-				</table>
-				{ msoClose }
+				{ notMsoOpen }
+				<div style={
+					direction === 'row' ? {
+						textAlign: alignToHorizontal[justifyContent]
+					} : null
+				}>
+					<div style={
+						direction === 'row' ? {
+							display: 'inline-table',
+							verticalAlign: 'top',
+							textAlign: 'left',
+							width: this.childrenFlexes > 0 || justifyContent === 'stretch' ? '100%' : null
+						} : null
+					}>
+					{ notMsoClose }
+					{ direction === 'row'
+						? this.renderMsoRowWrapper(this.renderItems())
+						: this.renderItems()
+					}
+					{ notMsoOpen }
+					</div>
+				</div>
+				{ notMsoClose }
 			</Block>
 		);
 	}
 
-	renderBody() {
-		const { children, gap, direction } = this.props;
+	renderMsoRowWrapper(body) {
+		const { justifyContent } = this.props;
 
-		const body = children.map((child, i) => (
+		const width = this.childrenFlexes > 0 || justifyContent === 'stretch' ? '100%' : null;
+
+		// ! Outlook устанавливает для table text-align: left
+
+		return (
+			<Fragment>
+				{ msoOpen }
+				<table {...msoTableProps} width="100%">
+					<tr>
+						<td align={alignToHorizontal[justifyContent]}>
+							<table {...msoTableProps} width={width} style={{ textAlign: 'left' }}>
+								<tr>
+									{ msoClose }
+									{ body }
+									{ msoOpen }
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				{ msoClose }
+			</Fragment>
+		);
+	}
+
+	renderItems() {
+		const { children, gap } = this.props;
+
+		return children.map((child, i) => (
 			<Fragment>
 				{ gap > 0 && i > 0 ? this.renderGap() : null }
-				{ this.renderFlexItem(child) }
+				{ this.renderItem(child) }
 			</Fragment>
 		));
-
-		return direction === 'row' ?
-			this.renderMsoRowBodyWrapper(body) :
-			body;
 	}
 
 	renderGap() {
@@ -97,7 +127,7 @@ export default class Flex extends Component {
 				{ direction === 'row' ? this.renderMsoRowGap() : this.renderMsoColumnGap() }
 				{ msoClose }
 				{ notMsoOpen }
-				<div style={direction === 'row' ? { display: 'table-cell' } : {}}>
+				<div style={direction === 'row' ? { display: 'table-cell' } : null}>
 					<div style={direction === 'row' ? { width: gap } : { height: gap }} />
 				</div>
 				{ notMsoClose }
@@ -131,41 +161,7 @@ export default class Flex extends Component {
 		);
 	}
 
-	renderMsoRowBodyWrapper(body) {
-		const { direction, justifyContent } = this.props;
-
-		const align = alignToHorizontal[justifyContent];
-		const width = this.childrenFlexes > 0 || justifyContent === 'stretch' ? '100%' : null;
-
-		return (
-			<Fragment>
-				{ msoOpen }
-				<table {...msoTableProps} width={width} align={align}>
-					<tr>
-						{ msoClose }
-						{ notMsoOpen }
-						<div style={
-							direction === 'row' ? {
-								display: 'inline-table',
-								verticalAlign: 'top',
-								textAlign: 'left',
-								width
-							} : {}
-						}>
-							{ notMsoClose }
-							{ body }
-							{ notMsoOpen }
-						</div>
-						{ notMsoClose }
-						{ msoOpen }
-					</tr>
-				</table>
-				{ msoClose }
-			</Fragment>
-		);
-	}
-
-	renderFlexItem(child) {
+	renderItem(child) {
 		const { direction, alignItems } = this.props;
 
 		let rowChildWidth = null;
@@ -207,10 +203,10 @@ export default class Flex extends Component {
 					<div style={
 						direction === 'column' ? {
 							display: 'inline-block',
-							verticalAlign: alignToVertical[alignSelf],
+							// verticalAlign: alignToVertical[alignSelf],
 							width: alignSelf === 'stretch' ? '100%' : child.props.width,
 							textAlign: 'left'
-						} : {}
+						} : null
 					}>
 						{ notMsoClose }
 						{ content }
@@ -222,13 +218,11 @@ export default class Flex extends Component {
 		);
 
 		return direction === 'row'
-			? this.renderMsoRowFlexItemWrapper(flexItem, { child, alignSelf, rowChildWidth })
-			: this.renderMsoColumnFlexItemWrapper(flexItem, { alignSelf });
+			? this.constructor.renderMsoRowFlexItemWrapper(flexItem, { child, alignSelf, rowChildWidth })
+			: this.constructor.renderMsoColumnFlexItemWrapper(flexItem, { alignSelf });
 	}
 
-	renderMsoRowFlexItemWrapper(flexItem, { child, alignSelf, rowChildWidth }) {
-		const { color } = this.props;
-
+	static renderMsoRowFlexItemWrapper(flexItem, { child, alignSelf, rowChildWidth }) {
 		const bgColor = isElement(child) && child.props.background && alignSelf === 'stretch'
 			? child.props.background
 			: null;
@@ -239,7 +233,6 @@ export default class Flex extends Component {
 				<td
 					width={rowChildWidth}
 					bgcolor={bgColor}
-					color={color}
 					valign={alignToVertical[alignSelf]}
 				>
 					{ msoClose }
@@ -251,17 +244,25 @@ export default class Flex extends Component {
 		);
 	}
 
-	renderMsoColumnFlexItemWrapper(flexItem, { alignSelf }) {
-		const { color } = this.props;
-
+	static renderMsoColumnFlexItemWrapper(flexItem, { alignSelf }) {
 		return (
 			<Fragment>
 				{ msoOpen }
-				<div align={alignToHorizontal[alignSelf]} style={{ color }}>
-					{ msoClose }
-					{ flexItem }
-					{ msoOpen }
-				</div>
+				<table {...msoTableProps} width="100%">
+					<tr>
+						<td align={alignToHorizontal[alignSelf]}>
+							<table {...msoTableProps} width={alignSelf === 'stretch' ? '100%' : null} style={{ textAlign: 'left' }}>
+								<tr>
+									<td>
+										{ msoClose }
+										{ flexItem }
+										{ msoOpen }
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
 				{ msoClose }
 			</Fragment>
 		);

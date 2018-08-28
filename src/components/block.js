@@ -24,7 +24,7 @@ const renderXPadding = padding => (
 	) : null
 );
 
-const Block = props => {
+const Block = (props, contextProps) => {
 	const {
 		width,
 		minWidth,
@@ -36,9 +36,11 @@ const Block = props => {
         children
     } = props;
 
+	const mixedProps = { ...props, ...contextProps };
+
 	const commonStyles = {
-		...textPropsToStyles(props),
-		...borderPropsToStyles(props),
+		...textPropsToStyles(mixedProps),
+		...borderPropsToStyles(mixedProps),
 		// ...marginParser.filterProps(props)
 	};
 

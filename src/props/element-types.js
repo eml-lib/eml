@@ -20,6 +20,9 @@ export default {
 	textDecorationColor: color,
 	textTransform: oneOf(['capitalize', 'uppercase', 'lowercase']),
 
+	// TODO
+	// textAlign: oneOf(['start', 'center', 'end', 'justify']),
+
 	// Background
 	// background: string,
 	backgroundColor: color,

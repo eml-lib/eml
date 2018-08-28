@@ -61,7 +61,7 @@ const Link = props => {
 		color
 	};
 
-	console.log('commonStyles', commonStyles.textDecoration);
+	console.log('padding', parsedProps.width);
 
 	if (isBlock) {
 		return (
@@ -170,7 +170,8 @@ const Link = props => {
 };
 
 Link.defaultProps = {
-	padding: 0
+	padding: 0,
+	textDecoration: true
 };
 
 Link.propTypes = {
