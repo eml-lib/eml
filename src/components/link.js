@@ -61,8 +61,6 @@ const Link = props => {
 		color
 	};
 
-	console.log('padding', parsedProps.width);
-
 	if (isBlock) {
 		return (
 			<Fragment>

@@ -16,21 +16,27 @@
     "test": "jest",
     "prepublishOnly": "npm run build"
   },
-  "devDependencies": {
-    "@types/jest": "^23.3.1",
-    "babel-core": "^6.26.3",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-2": "^6.24.1",
-    "babel-preset-stage-3": "^6.24.1",
+  "dependencies": {
+    "babel-core": "6.26.3",
+    "babel-plugin-external-helpers": "6.22.0",
+    "babel-plugin-transform-react-jsx": "6.24.1",
+    "babel-preset-env": "1.7.0",
+    "babel-preset-stage-2": "6.24.1",
+    "babel-preset-stage-3": "6.24.1",
+    "classnames": "2.2.6",
+    "css-color-converter": "1.1.0",
     "eml-core": "../eml-core",
-    "jest": "^23.4.2",
-    "rollup": "^0.64.1",
-    "rollup-plugin-babel": "^3.0.7",
-    "rollup-plugin-commonjs": "^9.1.4",
-    "rollup-plugin-json": "^3.0.0",
-    "rollup-plugin-node-resolve": "^3.3.0"
+    "prop-types": "15.6.2",
+    "url-regex": "4.1.1",
+    "rollup": "0.65.0",
+    "rollup-plugin-babel": "3.0.7",
+    "rollup-plugin-commonjs": "9.1.4",
+    "rollup-plugin-json": "3.0.0",
+    "rollup-plugin-node-resolve": "3.3.0"
+  },
+  "devDependencies": {
+    "@types/jest": "23.3.1",
+    "jest": "23.4.2"
   },
   "jest": {
     "testURL": "http://localhost/",
@@ -41,11 +47,5 @@
   "bugs": {
     "url": "https://github.com/eml-lib/eml/issues"
   },
-  "license": "ISC",
-  "dependencies": {
-    "classnames": "^2.2.6",
-    "css-color-converter": "^1.1.0",
-    "prop-types": "^15.6.2",
-    "url-regex": "^4.1.1"
-  }
+  "license": "ISC"
 }
