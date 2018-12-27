@@ -1,6 +1,6 @@
 import msoTableProps from './helpers/mso-table-props';
 
-export default (props, contextProps) => {
+export default (props, context) => {
 	const {
 		width,
 		children
@@ -11,7 +11,7 @@ export default (props, contextProps) => {
 		textAlign,
 		fontSize,
 		lineHeight
-	} = contextProps;
+	} = context;
 
 	return (
 		<table {...msoTableProps} width={width}>

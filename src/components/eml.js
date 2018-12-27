@@ -1,11 +1,11 @@
-import { createElement, Fragment, renderHtml } from 'eml-core';
+import { createElement, Fragment, Context, renderHtml } from 'eml-core';
 import propTypes from 'prop-types';
 import color from '../props/types/color';
 import repeat from '../helpers/string-repeat';
 import { convert as convertColor } from '../props/parsers/color';
 import { msoOpen, msoLteVersion, msoGteVersion, msoClose, notMsoOpen, notMsoClose } from './helpers/conditional-comments';
 
-const { string } = propTypes;
+const { number, string, arrayOf } = propTypes;
 
 const commonStyles = [
 	'body { margin: 0 }',
@@ -53,16 +53,21 @@ const Eml = props => {
 	const {
 		previewText,
 		fontFamily,
-
 		children
 	} = props;
 
 	const backgroundColor = props.backgroundColor ? convertColor(props.backgroundColor) : null;
 
+	const xmlns = {
+		'xmlns':	'http://www.w3.org/1999/xhtml',
+		'xmlns:v':	'urn:schemas-microsoft-com:vml',
+		'xmlns:o':	'urn:schemas-microsoft-com:office:office'
+	};
+
 	return (
 		<Fragment>
 			{ '<!DOCTYPE html>' }
-			{ '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">' }
+			<html {...xmlns}>
 				<head>
 					<meta charSet="utf-8" />
 					<meta httpEquiv="Content-Type" content="text/html, charset=utf-8" />
@@ -72,7 +77,7 @@ const Eml = props => {
 						{ commonStyles }
 					</style>
 
-					{ fontFamily && (
+					{ fontFamily ? (
 						<Fragment>
 							{ notMsoOpen }
 							<link href={`https://fonts.googleapis.com/css?family=${fontFamily}:400,700`} rel="stylesheet" type="text/css" />
@@ -81,7 +86,7 @@ const Eml = props => {
 							</style>
 							{ notMsoClose }
 						</Fragment>
-					) }
+					) : null }
 
 					{ msoOpen }
 					<style type="text/css">
@@ -111,20 +116,21 @@ const Eml = props => {
 					{ msoClose }
 				</head>
 				<body bgcolor={backgroundColor}>
-					{ previewText && preview(previewText) }
+					{ previewText ? preview(previewText) : null }
 
 					{ notMsoOpen }
 					<div className="wrapper">
 						{ notMsoClose }
 
+						<Context>
 						{ children }
+						</Context>
 
 						{ notMsoOpen }
 					</div>
 					{ notMsoClose }
-
 				</body>
-			{ '</html>' }
+			</html>
 		</Fragment>
 	);
 };
@@ -132,6 +138,7 @@ const Eml = props => {
 Eml.propTypes = {
 	previewText: string,
 	fontFamily: string,
+	breakpoints: arrayOf(number),
 	backgroundColor: color
 };
 

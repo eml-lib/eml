@@ -24,7 +24,7 @@ const renderXPadding = padding => (
 	) : null
 );
 
-const Block = (props, contextProps) => {
+const Block = (props, context) => {
 	const {
 		width,
 		minWidth,
@@ -36,7 +36,7 @@ const Block = (props, contextProps) => {
         children
     } = props;
 
-	const mixedProps = { ...props, ...contextProps };
+	const mixedProps = { ...props, ...context };
 
 	const commonStyles = {
 		...textPropsToStyles(mixedProps),
